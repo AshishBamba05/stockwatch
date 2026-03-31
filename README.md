@@ -1,4 +1,4 @@
-# 📈 StockTrackr ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+# 📈 StockWatch ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 **Real-time portfolio tracking platform**
 
