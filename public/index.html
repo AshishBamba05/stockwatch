@@ -6,199 +6,521 @@
   <title>StockTrackr Dashboard</title>
   <style>
     :root {
-      --bg: #f4efe6;
-      --panel: rgba(255, 251, 245, 0.88);
-      --panel-strong: #fffdf9;
-      --ink: #1f1b18;
-      --muted: #6f655d;
-      --line: rgba(48, 37, 29, 0.12);
-      --accent: #14532d;
-      --accent-soft: rgba(20, 83, 45, 0.08);
-      --danger: #991b1b;
-      --danger-soft: rgba(153, 27, 27, 0.08);
-      --shadow: 0 22px 60px rgba(54, 38, 25, 0.12);
+      --bg: #07111f;
+      --bg-deep: #040912;
+      --panel: rgba(9, 22, 39, 0.82);
+      --panel-strong: rgba(10, 26, 45, 0.96);
+      --panel-soft: rgba(255, 255, 255, 0.03);
+      --line: rgba(153, 205, 255, 0.12);
+      --line-strong: rgba(153, 205, 255, 0.24);
+      --ink: #edf5ff;
+      --muted: #8da3bd;
+      --accent: #61e7c2;
+      --accent-2: #67a9ff;
+      --rise: #67f0aa;
+      --fall: #ff7f8f;
+      --warn: #ffd166;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+      --radius: 26px;
+      --radius-sm: 18px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
-      color: var(--ink);
-      font-family: Georgia, "Times New Roman", serif;
-      background:
-        radial-gradient(circle at top left, rgba(20, 83, 45, 0.14), transparent 34%),
-        radial-gradient(circle at top right, rgba(153, 27, 27, 0.1), transparent 28%),
-        linear-gradient(180deg, #f8f3ea 0%, var(--bg) 58%, #efe5d7 100%);
       min-height: 100vh;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(97, 231, 194, 0.17), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(103, 169, 255, 0.18), transparent 26%),
+        radial-gradient(circle at 50% 100%, rgba(255, 209, 102, 0.12), transparent 20%),
+        linear-gradient(180deg, #091425 0%, var(--bg) 50%, var(--bg-deep) 100%);
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 88px 88px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent 90%);
+    }
+
+    body::after {
+      background:
+        radial-gradient(circle at center, transparent 0 55%, rgba(4, 9, 18, 0.5) 100%);
     }
 
     main {
-      width: min(1180px, calc(100% - 32px));
-      margin: 32px auto 56px;
+      position: relative;
+      z-index: 1;
+      width: min(1320px, calc(100% - 32px));
+      margin: 28px auto 56px;
     }
 
     .hero {
-      background: linear-gradient(135deg, rgba(255, 253, 249, 0.92), rgba(255, 247, 236, 0.78));
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 28px;
-      box-shadow: var(--shadow);
-      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      padding: 18px 0 4px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      right: -80px;
+      top: -120px;
+      background: radial-gradient(circle, rgba(97, 231, 194, 0.22), transparent 65%);
+      filter: blur(10px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+      gap: 36px;
+      margin-top: 18px;
+      align-items: start;
     }
 
     .hero h1 {
-      margin: 0 0 10px;
-      font-size: clamp(2rem, 4vw, 3.6rem);
-      line-height: 0.95;
+      margin: 14px 0 12px;
+      font-size: clamp(2.8rem, 6vw, 5.6rem);
+      line-height: 0.92;
+      letter-spacing: -0.05em;
+      max-width: 8ch;
     }
 
     .hero p {
       margin: 0;
+      max-width: 720px;
       color: var(--muted);
-      font-size: 1rem;
-      max-width: 760px;
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    .hero-panel {
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      display: grid;
+      gap: 16px;
+      align-self: start;
+    }
+
+    .hero-panel p {
+      font-size: 0.94rem;
     }
 
     .session-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      margin-top: 18px;
-    }
-
-    .grid {
       display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
     }
 
-    .card {
+    .session-strip {
+      padding: 16px 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 34px;
+    }
+
+    .stat-card,
+    .panel {
       background: var(--panel);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      padding: 20px;
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(153, 205, 255, 0.08);
+      border-radius: var(--radius);
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.26);
     }
 
-    .span-12 { grid-column: span 12; }
-    .span-7 { grid-column: span 7; }
-    .span-5 { grid-column: span 5; }
-    .span-6 { grid-column: span 6; }
-
-    h2, h3 {
-      margin: 0 0 14px;
-      font-size: 1.2rem;
+    .stat-card {
+      padding: 16px 16px 18px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .subtle {
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -20px -28px auto;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(103, 169, 255, 0.2), transparent 70%);
+    }
+
+    .stat-label {
+      display: block;
       color: var(--muted);
-      font-size: 0.94rem;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: clamp(1.35rem, 2vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .stat-meta {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.75fr);
+      gap: 32px;
+      align-items: start;
+    }
+
+    .column {
+      display: grid;
+      gap: 26px;
+      align-content: start;
+    }
+
+    .panel {
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .panel::after {
+      display: none;
+    }
+
+    .panel-header,
+    .title-row,
+    .watchlist-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .panel-header {
+      margin-bottom: 18px;
+    }
+
+    .panel h2,
+    .panel h3 {
+      margin: 0;
+      letter-spacing: -0.03em;
+    }
+
+    .lede,
+    .muted {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .lede {
+      margin: 0;
+      max-width: 70ch;
     }
 
     .price-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
     }
 
     .price-tile {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 16px;
-      background: var(--panel-strong);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(153, 205, 255, 0.1);
+      border-radius: 22px;
+      padding: 18px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(255, 255, 255, 0.02);
+      color: inherit;
+      text-align: left;
       cursor: pointer;
-      transition: transform 150ms ease, border-color 150ms ease;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
     }
 
-    .price-tile:hover { transform: translateY(-2px); border-color: rgba(20, 83, 45, 0.3); }
-    .price-tile strong { display: block; font-size: 1.2rem; margin-bottom: 10px; }
-    .price-value { font-size: 1.8rem; }
-    .up { color: var(--accent); }
-    .down { color: var(--danger); }
+    .price-tile:hover,
+    .price-tile.selected {
+      transform: translateY(-3px);
+      border-color: var(--line-strong);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+    }
+
+    .price-tile::before {
+      content: "";
+      position: absolute;
+      inset: auto -10px -38px auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(97, 231, 194, 0.18), transparent 70%);
+    }
+
+    .ticker {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ticker strong {
+      font-size: 1.15rem;
+      letter-spacing: 0.08em;
+    }
+
+    .trend {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .price-main {
+      margin-top: 20px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .price-value {
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.05em;
+    }
+
+    .micro {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .up {
+      color: var(--rise);
+    }
+
+    .down {
+      color: var(--fall);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pill.live {
+      color: var(--accent);
+      border-color: rgba(97, 231, 194, 0.18);
+      background: rgba(97, 231, 194, 0.08);
+    }
+
+    .pill.offline {
+      color: var(--warn);
+      border-color: rgba(255, 209, 102, 0.18);
+      background: rgba(255, 209, 102, 0.08);
+    }
+
+    .pill.alert {
+      color: var(--fall);
+      border-color: rgba(255, 127, 143, 0.18);
+      background: rgba(255, 127, 143, 0.08);
+    }
 
     form {
       display: grid;
-      gap: 10px;
+      gap: 12px;
     }
 
     .form-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 10px;
     }
 
-    input, select, button {
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .subpanel {
+      border: 1px solid rgba(153, 205, 255, 0.08);
+      border-radius: 22px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .subpanel h3 {
+      margin-bottom: 8px;
+    }
+
+    input,
+    select,
+    button {
       width: 100%;
-      border-radius: 14px;
       border: 1px solid var(--line);
+      border-radius: 16px;
       padding: 12px 14px;
       font: inherit;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.04);
       color: var(--ink);
+      transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
+    }
+
+    input::placeholder {
+      color: #7a91ad;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: rgba(103, 169, 255, 0.42);
+      background: rgba(255, 255, 255, 0.07);
     }
 
     button {
       cursor: pointer;
-      background: var(--ink);
-      color: #fff;
-      border-color: var(--ink);
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      color: #05111d;
+      font-weight: 700;
+      border-color: transparent;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
     }
 
     button.secondary {
-      background: transparent;
+      background: rgba(255, 255, 255, 0.03);
       color: var(--ink);
+      border-color: var(--line);
     }
 
     button.danger {
-      background: var(--danger-soft);
-      color: var(--danger);
-      border-color: rgba(153, 27, 27, 0.22);
+      background: rgba(255, 127, 143, 0.1);
+      color: var(--fall);
+      border-color: rgba(255, 127, 143, 0.2);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      font-size: 0.95rem;
     }
 
-    th, td {
+    th,
+    td {
+      padding: 14px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
       text-align: left;
-      padding: 12px 8px;
-      border-bottom: 1px solid var(--line);
       vertical-align: top;
     }
 
-    th { color: var(--muted); font-weight: 600; }
-    .right { text-align: right; }
-    .pill {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 0.84rem;
+    th {
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
     }
 
-    .stack {
+    .right {
+      text-align: right;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .watchlists {
       display: grid;
-      gap: 12px;
+      gap: 14px;
+      margin-top: 16px;
     }
 
     .watchlist {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      background: var(--panel-strong);
-    }
-
-    .watchlist-header,
-    .inline-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      justify-content: space-between;
+      padding: 16px;
+      border: 1px solid rgba(153, 205, 255, 0.08);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.025);
     }
 
     .chip-row {
@@ -212,10 +534,12 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(20, 83, 45, 0.06);
+      padding: 7px 10px;
       border-radius: 999px;
-      padding: 6px 10px;
-      border: 1px solid rgba(20, 83, 45, 0.12);
+      background: rgba(97, 231, 194, 0.08);
+      border: 1px solid rgba(97, 231, 194, 0.14);
+      color: var(--ink);
+      font-size: 0.9rem;
     }
 
     .chip button {
@@ -223,138 +547,283 @@
       padding: 0;
       border: 0;
       background: transparent;
-      color: var(--danger);
+      color: var(--fall);
+      font-weight: 700;
+    }
+
+    .feed {
+      position: relative;
+      overflow: hidden;
+      min-height: 440px;
+      padding: 22px;
+      border: 1px solid rgba(153, 205, 255, 0.08);
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at top right, rgba(97, 231, 194, 0.1), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 28%),
+        rgba(3, 10, 19, 0.68);
+    }
+
+    .section-rule {
+      height: 1px;
+      margin: 8px 0 0;
+      background: linear-gradient(90deg, rgba(103, 169, 255, 0.24), transparent 70%);
     }
 
     pre {
       margin: 0;
-      border-radius: 18px;
-      padding: 14px;
-      background: #161412;
-      color: #f8f3ea;
-      min-height: 160px;
-      max-height: 300px;
-      overflow: auto;
+      padding: 0;
+      background: transparent;
+      color: #d8e7f8;
+      font-family: "SFMono-Regular", ui-monospace, monospace;
       white-space: pre-wrap;
+      line-height: 1.55;
+      max-height: 420px;
+      overflow: auto;
     }
 
-    @media (max-width: 920px) {
-      .span-7, .span-5, .span-6 { grid-column: span 12; }
-      main { width: min(100% - 20px, 1180px); margin-top: 20px; }
-      .hero, .card { padding: 18px; border-radius: 20px; }
+    .empty {
+      color: var(--muted);
+      padding: 22px 10px;
+      text-align: center;
+    }
+
+    .flash {
+      animation: pulse 650ms ease;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(97, 231, 194, 0.34); }
+      100% { box-shadow: 0 0 0 18px rgba(97, 231, 194, 0); }
+    }
+
+    @media (max-width: 1120px) {
+      .hero-grid,
+      .layout,
+      .action-grid,
+      .stat-grid,
+      .price-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      main {
+        width: min(100% - 18px, 1320px);
+        margin-top: 18px;
+      }
+
+      .stat-card,
+      .feed {
+        border-radius: 24px;
+      }
+
+      .session-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        max-width: none;
+      }
     }
   </style>
 </head>
 <body>
   <main>
     <section class="hero">
-      <h1>StockTrackr</h1>
-      <p>Session-based trading dashboard with live price streaming, trade execution, watchlist management, and percent-move alerting powered by Express, PostgreSQL, Redis, Docker, and WebSockets.</p>
-      <div class="session-bar">
-        <input id="sessionId" placeholder="Session ID" />
-        <button id="saveSession">Save Session</button>
-        <button class="secondary" id="refreshAll">Refresh Dashboard</button>
-        <span class="pill" id="socketStatus">Connecting...</span>
+      <span class="eyebrow">Real-Time Market Control</span>
+      <div class="hero-grid">
+        <div>
+          <h1>Trade faster. Watch everything.</h1>
+          <p>StockTrackr is your session-based command deck for live quotes, rapid trade execution, watchlist curation, and 15%+ movement alerts backed by Express, PostgreSQL, Redis, Docker, and WebSockets.</p>
+        </div>
+        <aside class="hero-panel">
+          <div>
+            <span class="stat-label">Current Session</span>
+            <div class="stat-value" id="sessionBadge">Initializing</div>
+          </div>
+          <p>Select any price tile to prefill trading, CRUD, and alert forms. All actions stay isolated to the session id you save below.</p>
+          <div class="session-strip">
+            <div class="session-bar">
+              <input id="sessionId" placeholder="Session ID" />
+              <button id="saveSession">Save Session</button>
+              <button class="secondary" id="refreshAll">Refresh</button>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
 
-    <section class="grid">
-      <article class="card span-12">
-        <h2>Live Prices</h2>
-        <p class="subtle">Click a symbol tile to preload forms. Stream interval is configured below one second for responsive updates.</p>
-        <div class="price-grid" id="priceGrid"></div>
+    <section class="stat-grid">
+      <article class="stat-card">
+        <span class="stat-label">Socket Status</span>
+        <div class="stat-value" id="socketMetric">Connecting</div>
+        <div class="stat-meta" id="socketStatusMeta">Waiting for live stream</div>
       </article>
+      <article class="stat-card">
+        <span class="stat-label">Focused Symbol</span>
+        <div class="stat-value" id="focusMetric">AAPL</div>
+        <div class="stat-meta" id="focusMeta">Click any symbol to pin it</div>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Open Positions</span>
+        <div class="stat-value" id="positionsMetric">0</div>
+        <div class="stat-meta" id="positionsMeta">No active exposure yet</div>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Alert Rules</span>
+        <div class="stat-value" id="alertsMetric">0</div>
+        <div class="stat-meta" id="alertsMeta">15% movement alerts armed</div>
+      </article>
+    </section>
 
-      <article class="card span-7">
-        <h2>Trade Execution</h2>
-        <form id="tradeForm">
-          <div class="form-row">
-            <input id="tradeSymbol" placeholder="Symbol" required />
-            <input id="tradeQuantity" type="number" min="1" step="1" placeholder="Quantity" required />
-            <select id="tradeSide">
-              <option value="buy">Buy</option>
-              <option value="sell">Sell</option>
-            </select>
+    <section class="layout">
+      <div class="column">
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Live Quotes</h2>
+              <p class="lede">Sub-second streaming quotes with visual direction changes and tap-to-focus interactions.</p>
+            </div>
+            <span class="pill live" id="socketStatus">Connecting...</span>
           </div>
-          <button type="submit">Execute Trade</button>
-        </form>
-        <div class="inline-actions" style="margin-top: 14px;">
-          <h3>Open Positions</h3>
-          <button class="secondary" id="refreshPositions" type="button">Reload</button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Symbol</th>
-              <th class="right">Qty</th>
-              <th class="right">Avg Cost</th>
-              <th class="right">Price</th>
-              <th class="right">PnL %</th>
-              <th class="right">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="positionsBody"></tbody>
-        </table>
-      </article>
+          <div class="section-rule"></div>
+          <div style="height: 18px;"></div>
+          <div class="price-grid" id="priceGrid"></div>
+        </article>
 
-      <article class="card span-5">
-        <h2>Manual Position CRUD</h2>
-        <p class="subtle">Use this to directly create or update a saved position record in PostgreSQL.</p>
-        <form id="positionCrudForm">
-          <div class="form-row">
-            <input id="positionSymbol" placeholder="Symbol" required />
-            <input id="positionQuantity" type="number" min="0.01" step="0.01" placeholder="Quantity" required />
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Execution Desk</h2>
+              <p class="lede">Use the live execution form for buy and sell flow, or directly manage persisted positions in PostgreSQL.</p>
+            </div>
+            <span class="badge" id="selectedSymbolBadge">Selected: AAPL</span>
           </div>
-          <div class="form-row">
-            <input id="positionAvgCost" type="number" min="0.01" step="0.01" placeholder="Average Cost" required />
-            <button type="submit">Save Position</button>
-          </div>
-        </form>
-      </article>
+          <div class="section-rule"></div>
+          <div style="height: 18px;"></div>
+          <div class="action-grid">
+            <section class="subpanel">
+              <h3>Trade Execution</h3>
+              <p class="muted">Trades use the latest cached market price from Redis.</p>
+              <form id="tradeForm">
+                <div class="form-row">
+                  <input id="tradeSymbol" placeholder="Symbol" required />
+                  <input id="tradeQuantity" type="number" min="1" step="1" placeholder="Quantity" required />
+                  <select id="tradeSide">
+                    <option value="buy">Buy</option>
+                    <option value="sell">Sell</option>
+                  </select>
+                </div>
+                <button type="submit">Execute Trade</button>
+              </form>
+            </section>
 
-      <article class="card span-6">
-        <h2>Watchlists</h2>
-        <form id="watchlistForm">
-          <div class="form-row">
-            <input id="watchlistName" placeholder="New watchlist name" required />
-            <button type="submit">Create Watchlist</button>
+            <section class="subpanel">
+              <h3>Position CRUD</h3>
+              <p class="muted">Create or overwrite a position record directly when you need manual control.</p>
+              <form id="positionCrudForm">
+                <div class="form-row">
+                  <input id="positionSymbol" placeholder="Symbol" required />
+                  <input id="positionQuantity" type="number" min="0.01" step="0.01" placeholder="Quantity" required />
+                </div>
+                <div class="form-row">
+                  <input id="positionAvgCost" type="number" min="0.01" step="0.01" placeholder="Average Cost" required />
+                  <button type="submit">Save Position</button>
+                </div>
+              </form>
+            </section>
           </div>
-        </form>
-        <div class="stack" id="watchlists"></div>
-      </article>
 
-      <article class="card span-6">
-        <h2>Alerts</h2>
-        <p class="subtle">Default alert configuration tracks 15%+ price movement from the current cached live price.</p>
-        <form id="alertForm">
-          <div class="form-row">
-            <input id="alertSymbol" placeholder="Symbol" required />
-            <input id="alertPercent" type="number" min="1" step="0.1" value="15" required />
-            <select id="alertDirection">
-              <option value="either">15% move either way</option>
-              <option value="up">15% upward move</option>
-              <option value="down">15% downward move</option>
-            </select>
+          <div class="title-row" style="margin: 18px 0 12px;">
+            <h3>Portfolio Positions</h3>
+            <button class="secondary" id="refreshPositions" type="button">Reload Positions</button>
           </div>
-          <button type="submit">Create Alert</button>
-        </form>
-        <table>
-          <thead>
-            <tr>
-              <th>Rule</th>
-              <th>Baseline</th>
-              <th>State</th>
-              <th class="right">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="alertsBody"></tbody>
-        </table>
-      </article>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Symbol</th>
+                  <th class="right">Qty</th>
+                  <th class="right">Avg Cost</th>
+                  <th class="right">Price</th>
+                  <th class="right">PnL</th>
+                  <th class="right">PnL %</th>
+                  <th class="right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="positionsBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
 
-      <article class="card span-12">
-        <h2>Activity Feed</h2>
-        <pre id="activity"></pre>
-      </article>
+      <div class="column">
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Watchlists</h2>
+              <p class="lede">Group symbols into fast-moving lists and keep your personal market view organized.</p>
+            </div>
+          </div>
+          <div class="section-rule"></div>
+          <div style="height: 18px;"></div>
+          <form id="watchlistForm">
+            <div class="form-row">
+              <input id="watchlistName" placeholder="New watchlist name" required />
+              <button type="submit">Create Watchlist</button>
+            </div>
+          </form>
+          <div class="watchlists" id="watchlists"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Movement Alerts</h2>
+              <p class="lede">Arm percent-move rules against the latest cached price and get notified in the feed when a threshold breaks.</p>
+            </div>
+          </div>
+          <div class="section-rule"></div>
+          <div style="height: 18px;"></div>
+          <form id="alertForm">
+            <div class="form-row">
+              <input id="alertSymbol" placeholder="Symbol" required />
+              <input id="alertPercent" type="number" min="1" step="0.1" value="15" required />
+              <select id="alertDirection">
+                <option value="either">Either Direction</option>
+                <option value="up">Upward Move</option>
+                <option value="down">Downward Move</option>
+              </select>
+            </div>
+            <button type="submit">Create Alert Rule</button>
+          </form>
+          <div class="table-wrap" style="margin-top: 14px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rule</th>
+                  <th>Baseline</th>
+                  <th>State</th>
+                  <th class="right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="alertsBody"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel feed">
+          <div class="panel-header">
+            <div>
+              <h2>Activity Feed</h2>
+              <p class="lede">Live events, executions, and alert firings land here as they happen.</p>
+            </div>
+            <button class="secondary" id="clearFeed" type="button">Clear Feed</button>
+          </div>
+          <pre id="activity"></pre>
+        </article>
+      </div>
     </section>
   </main>
 
@@ -367,19 +836,32 @@
     const alertsBody = document.getElementById('alertsBody');
     const socketStatus = document.getElementById('socketStatus');
     const sessionInput = document.getElementById('sessionId');
+    const sessionBadge = document.getElementById('sessionBadge');
+    const socketMetric = document.getElementById('socketMetric');
+    const socketStatusMeta = document.getElementById('socketStatusMeta');
+    const focusMetric = document.getElementById('focusMetric');
+    const focusMeta = document.getElementById('focusMeta');
+    const positionsMetric = document.getElementById('positionsMetric');
+    const positionsMeta = document.getElementById('positionsMeta');
+    const alertsMetric = document.getElementById('alertsMetric');
+    const alertsMeta = document.getElementById('alertsMeta');
+    const selectedSymbolBadge = document.getElementById('selectedSymbolBadge');
 
     const state = {
       sessionId: localStorage.getItem('stocktrackr_session') || `demo-${Math.random().toString(36).slice(2, 10)}`,
       prices: {},
       watchlists: [],
-      alerts: []
+      alerts: [],
+      positions: [],
+      selectedSymbol: 'AAPL'
     };
 
     sessionInput.value = state.sessionId;
+    sessionBadge.textContent = state.sessionId;
 
     function log(message) {
       const timestamp = new Date().toLocaleTimeString();
-      activityEl.textContent = `[${timestamp}] ${message}\n` + activityEl.textContent;
+      activityEl.textContent = `[${timestamp}] ${message}\n${activityEl.textContent}`.trim();
     }
 
     function headers(json = false) {
@@ -412,23 +894,62 @@
       return `${Number(value).toFixed(2)}%`;
     }
 
+    function flash(el) {
+      el.classList.remove('flash');
+      void el.offsetWidth;
+      el.classList.add('flash');
+    }
+
+    function updateSummary() {
+      sessionBadge.textContent = state.sessionId;
+      focusMetric.textContent = state.selectedSymbol;
+      focusMeta.textContent = state.prices[state.selectedSymbol]?.price != null
+        ? `Last tick ${fmtMoney(state.prices[state.selectedSymbol].price)}`
+        : 'Waiting for focused symbol quote';
+      positionsMetric.textContent = String(state.positions.length);
+      positionsMeta.textContent = state.positions.length
+        ? `${state.positions.map((row) => row.symbol).join(', ')}`
+        : 'No active exposure yet';
+      alertsMetric.textContent = String(state.alerts.length);
+      alertsMeta.textContent = state.alerts.length
+        ? `${state.alerts.filter((row) => row.last_state === 'triggered').length} triggered`
+        : '15% movement alerts armed';
+      selectedSymbolBadge.textContent = `Selected: ${state.selectedSymbol}`;
+    }
+
+    function setSocketState(kind, label, meta) {
+      socketStatus.textContent = label;
+      socketStatus.className = `pill ${kind}`;
+      socketMetric.textContent = label;
+      socketStatusMeta.textContent = meta;
+    }
+
     function selectSymbol(symbol) {
+      state.selectedSymbol = symbol;
       document.getElementById('tradeSymbol').value = symbol;
       document.getElementById('positionSymbol').value = symbol;
       document.getElementById('alertSymbol').value = symbol;
+      updateSummary();
+      renderPrices();
     }
 
     function renderPrices() {
       priceGrid.innerHTML = '';
       DEFAULT_SYMBOLS.forEach((symbol) => {
         const snapshot = state.prices[symbol];
+        const trend = snapshot?.trend || 'steady';
         const tile = document.createElement('button');
         tile.type = 'button';
-        tile.className = 'price-tile';
+        tile.className = `price-tile${state.selectedSymbol === symbol ? ' selected' : ''}`;
         tile.innerHTML = `
-          <strong>${symbol}</strong>
-          <div class="price-value ${snapshot?.trend || ''}">${snapshot ? fmtMoney(snapshot.price) : '—'}</div>
-          <div class="subtle">${snapshot?.latencyMs != null ? `${snapshot.latencyMs} ms stream latency` : 'Awaiting first tick'}</div>
+          <div class="ticker">
+            <strong>${symbol}</strong>
+            <span class="trend ${trend === 'up' ? 'up' : trend === 'down' ? 'down' : ''}">${trend}</span>
+          </div>
+          <div class="price-main">
+            <div class="price-value ${snapshot?.trend || ''}">${snapshot ? fmtMoney(snapshot.price) : '—'}</div>
+          </div>
+          <div class="micro">${snapshot?.latencyMs != null ? `${snapshot.latencyMs} ms stream latency` : 'Awaiting first tick'}</div>
         `;
         tile.addEventListener('click', () => selectSymbol(symbol));
         priceGrid.appendChild(tile);
@@ -436,14 +957,17 @@
     }
 
     function renderPositions(rows) {
-      positionsBody.innerHTML = rows.length ? '' : `<tr><td colspan="6" class="subtle">No positions yet.</td></tr>`;
+      state.positions = rows;
+      positionsBody.innerHTML = rows.length ? '' : `<tr><td colspan="7" class="empty">No positions yet.</td></tr>`;
+
       rows.forEach((row) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${row.symbol}</td>
+          <td><strong>${row.symbol}</strong></td>
           <td class="right">${Number(row.quantity).toFixed(2)}</td>
           <td class="right">${fmtMoney(row.avg_cost)}</td>
           <td class="right">${fmtMoney(row.price)}</td>
+          <td class="right ${row.pnl >= 0 ? 'up' : 'down'}">${fmtMoney(row.pnl)}</td>
           <td class="right ${row.pnlPct >= 0 ? 'up' : 'down'}">${fmtPct(row.pnlPct)}</td>
           <td class="right"></td>
         `;
@@ -455,7 +979,7 @@
         editButton.className = 'secondary';
         editButton.textContent = 'Edit';
         editButton.addEventListener('click', () => {
-          document.getElementById('positionSymbol').value = row.symbol;
+          selectSymbol(row.symbol);
           document.getElementById('positionQuantity').value = row.quantity;
           document.getElementById('positionAvgCost').value = row.avg_cost;
         });
@@ -473,12 +997,14 @@
         actions.append(editButton, deleteButton);
         positionsBody.appendChild(tr);
       });
+
+      updateSummary();
     }
 
     function renderWatchlists() {
       watchlistsEl.innerHTML = '';
       if (!state.watchlists.length) {
-        watchlistsEl.innerHTML = `<p class="subtle">No watchlists yet.</p>`;
+        watchlistsEl.innerHTML = `<div class="empty">No watchlists yet.</div>`;
         return;
       }
 
@@ -486,20 +1012,23 @@
         const article = document.createElement('article');
         article.className = 'watchlist';
         article.innerHTML = `
-          <div class="watchlist-header">
-            <strong>${watchlist.name}</strong>
-            <div class="inline-actions"></div>
+          <div class="watchlist-top">
+            <div>
+              <h3>${watchlist.name}</h3>
+              <div class="muted">${watchlist.symbols.length} tracked symbol${watchlist.symbols.length === 1 ? '' : 's'}</div>
+            </div>
+            <div class="title-row"></div>
           </div>
-          <form class="add-symbol-form">
+          <form class="add-symbol-form" style="margin-top: 14px;">
             <div class="form-row">
               <input placeholder="Add symbol to watchlist" required />
-              <button type="submit">Add</button>
+              <button type="submit">Add Symbol</button>
             </div>
           </form>
           <div class="chip-row"></div>
         `;
 
-        const actions = article.querySelector('.inline-actions');
+        const actions = article.querySelector('.title-row');
         const chips = article.querySelector('.chip-row');
         const addSymbolForm = article.querySelector('.add-symbol-form');
         const addSymbolInput = addSymbolForm.querySelector('input');
@@ -548,11 +1077,13 @@
           const chip = document.createElement('div');
           chip.className = 'chip';
           chip.innerHTML = `<span>${symbol}</span>`;
+          chip.addEventListener('click', () => selectSymbol(symbol));
 
           const removeButton = document.createElement('button');
           removeButton.type = 'button';
-          removeButton.textContent = 'Remove';
-          removeButton.addEventListener('click', async () => {
+          removeButton.textContent = 'x';
+          removeButton.addEventListener('click', async (event) => {
+            event.stopPropagation();
             await api(`/watchlists/${watchlist.id}/items/${symbol}`, { method: 'DELETE' });
             log(`Removed ${symbol} from ${watchlist.name}`);
             refreshWatchlists();
@@ -567,13 +1098,17 @@
     }
 
     function renderAlerts() {
-      alertsBody.innerHTML = state.alerts.length ? '' : `<tr><td colspan="4" class="subtle">No alerts yet.</td></tr>`;
+      alertsBody.innerHTML = state.alerts.length ? '' : `<tr><td colspan="4" class="empty">No alerts yet.</td></tr>`;
+
       state.alerts.forEach((alert) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${alert.symbol} ${alert.percent_threshold}% ${alert.movement_direction}</td>
+          <td>
+            <strong>${alert.symbol}</strong>
+            <div class="micro">${alert.percent_threshold}% ${alert.movement_direction}</div>
+          </td>
           <td>${fmtMoney(alert.baseline_price)}</td>
-          <td>${alert.last_state || 'armed'}</td>
+          <td><span class="badge ${alert.last_state === 'triggered' ? 'pill alert' : ''}">${alert.last_state || 'armed'}</span></td>
           <td class="right"></td>
         `;
 
@@ -613,6 +1148,8 @@
         actions.append(editButton, deleteButton);
         alertsBody.appendChild(tr);
       });
+
+      updateSummary();
     }
 
     async function refreshPositions() {
@@ -633,20 +1170,23 @@
     async function refreshAll() {
       await Promise.all([refreshPositions(), refreshWatchlists(), refreshAlerts()]);
       log(`Dashboard refreshed for session ${state.sessionId}`);
+      flash(document.querySelector('.hero'));
     }
 
     function connectSocket() {
       const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
       const socket = new WebSocket(`${protocol}://${location.host}/ws?sid=${encodeURIComponent(state.sessionId)}`);
 
+      setSocketState('offline', 'Connecting', 'Establishing WebSocket transport');
+
       socket.addEventListener('open', () => {
-        socketStatus.textContent = 'WebSocket live';
+        setSocketState('live', 'Live', 'Streaming quotes in real time');
         socket.send(JSON.stringify({ type: 'hello', sid: state.sessionId }));
         socket.send(JSON.stringify({ type: 'subscribe', symbols: DEFAULT_SYMBOLS }));
       });
 
       socket.addEventListener('close', () => {
-        socketStatus.textContent = 'Reconnecting...';
+        setSocketState('offline', 'Reconnecting', 'Socket dropped, attempting retry');
         setTimeout(connectSocket, 1000);
       });
 
@@ -659,8 +1199,13 @@
           state.prices[symbol] = {
             price,
             latencyMs: Math.max(0, Date.now() - ts),
-            trend: previous == null ? '' : price > previous ? 'up' : price < previous ? 'down' : ''
+            trend: previous == null ? 'steady' : price > previous ? 'up' : price < previous ? 'down' : 'steady'
           };
+
+          if (state.selectedSymbol === symbol) {
+            updateSummary();
+          }
+
           renderPrices();
           return;
         }
@@ -671,6 +1216,7 @@
           } else {
             log(`Threshold alert fired for ${message.payload.symbol} at ${message.payload.price}`);
           }
+          flash(document.querySelector('.feed'));
           refreshAlerts();
         }
       });
@@ -686,6 +1232,9 @@
 
     document.getElementById('refreshAll').addEventListener('click', refreshAll);
     document.getElementById('refreshPositions').addEventListener('click', refreshPositions);
+    document.getElementById('clearFeed').addEventListener('click', () => {
+      activityEl.textContent = '';
+    });
 
     document.getElementById('tradeForm').addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -698,6 +1247,7 @@
         body: JSON.stringify({ symbol, quantity, side })
       });
       log(`${side.toUpperCase()} ${result.executed_quantity} ${result.symbol} @ ${Number(result.execution_price).toFixed(2)}`);
+      flash(document.querySelector('.panel'));
       refreshPositions();
     });
 
@@ -753,7 +1303,9 @@
       refreshAlerts();
     });
 
+    selectSymbol(state.selectedSymbol);
     renderPrices();
+    updateSummary();
     refreshAll().catch((error) => log(error.message));
     connectSocket();
   </script>
