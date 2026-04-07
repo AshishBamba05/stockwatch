@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>StockTrackr Dashboard</title>
+  <title>StockWatch Dashboard</title>
   <style>
     :root {
       --bg: #07111f;
@@ -635,7 +635,7 @@
       <div class="hero-grid">
         <div>
           <h1>Trade faster. Watch everything.</h1>
-          <p>StockTrackr is your session-based command deck for live quotes, rapid trade execution, watchlist curation, and 15%+ movement alerts backed by Express, PostgreSQL, Redis, Docker, and WebSockets.</p>
+          <p>StockWatch is your session-based command deck for live quotes, rapid trade execution, watchlist curation, and 15%+ movement alerts backed by Express, PostgreSQL, Redis, Docker, and WebSockets.</p>
         </div>
         <aside class="hero-panel">
           <div>
@@ -848,7 +848,7 @@
     const selectedSymbolBadge = document.getElementById('selectedSymbolBadge');
 
     const state = {
-      sessionId: localStorage.getItem('stocktrackr_session') || `demo-${Math.random().toString(36).slice(2, 10)}`,
+      sessionId: localStorage.getItem('stockwatch_session') || localStorage.getItem('stocktrackr_session') || `demo-${Math.random().toString(36).slice(2, 10)}`,
       prices: {},
       watchlists: [],
       alerts: [],
@@ -1225,7 +1225,7 @@
     document.getElementById('saveSession').addEventListener('click', () => {
       state.sessionId = sessionInput.value.trim() || state.sessionId;
       sessionInput.value = state.sessionId;
-      localStorage.setItem('stocktrackr_session', state.sessionId);
+      localStorage.setItem('stockwatch_session', state.sessionId);
       log(`Session saved as ${state.sessionId}`);
       location.reload();
     });
