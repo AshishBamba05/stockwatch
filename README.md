@@ -80,7 +80,7 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 
 ## Price Live Stream
-)<img width="898" height="287" alt="Screenshot 2026-04-07 at 11 31 30 PM" src="https://github.com/user-attachments/assets/10e356bd-015c-4b45-aaa5-bac0cc912338" />
+<img width="898" height="287" alt="Screenshot 2026-04-07 at 11 31 30 PM" src="https://github.com/user-attachments/assets/10e356bd-015c-4b45-aaa5-bac0cc912338" />
 
 ## Trade Execution
 <img width="464" height="245" alt="Screenshot 2026-04-07 at 11 32 06 PM" src="https://github.com/user-attachments/assets/2d3d0fb7-59fa-4400-bca6-abf2c3464245" />
