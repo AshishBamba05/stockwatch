@@ -63,7 +63,7 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
    npm install
    ```
 
-3.) Start Postgres and Redis with Docker
+3.) Start `Postgres` and `Redis` with `Docker`
    ```bash
    docker compose up -d
    ```
