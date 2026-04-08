@@ -70,6 +70,10 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 4.) Setting up `.env`:
 
+#### Security Note:
+Do NOT commit your `.env` file. It contains sensitive credentials like your DB URI.
+
+Ensure `.env` is listed in your `.gitignore`.
 
 5.) Initialize the database schema:
    ```bash
