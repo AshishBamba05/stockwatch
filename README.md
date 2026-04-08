@@ -106,6 +106,17 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 I wanted to make StockWatch simulate real-world stock trading, and I knew a big part of that would come down to making the simulated price updates instantaneous to make it feel "live". Here's the pipeline I built to address this need: 
 
+- Computing Prices in src/prices/provider.ts:
+   - It sets starting prices for each stocks, then continuously updates them with a random step.
+
+- Fetching Prices To Redis:
+   - In src/prices/service.ts, we take those computed prices and fetch them into the Redis cache. In this context, "cache" means: store the latest known price so the backend can access it quickly.
+ 
+   - NOTE: In this project, Redis is used via the iosredis Node package.
+
+- Live, automatic display on frontend interface via WebSockets
+   - 
+
 ### 3. Postgres Database
 
 ### 4. Docker Containerization
