@@ -80,6 +80,13 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 ## 👨‍💻 Software Engineering Design Decisions
 
+Session Storage
+Price Live Stream
+Trade Execution
+Watchlist
+Alerts
+Activity Feed
+
 
 
 ## 📦 Installation
