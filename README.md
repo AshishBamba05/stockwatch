@@ -121,6 +121,7 @@ I wanted to make StockWatch simulate real-world stock trading, and I knew a big 
 
 ### 4. Docker Containerization
 
+I integrated Docker to ease the burden of installing dependencies. Instead of having to seperate download both Redis and PsotgreSQL, `docker compose up -d` brings up the data layer quickly so everyone gets the same layers and version setup of all dependencies.
 
 
 ## 📦 Installation
