@@ -58,12 +58,28 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
    cd stocktrackr
    ```
 
-2.) Install Node dependencies
+2.) Install `Node` dependencies:
    ```bash
    npm install
    ```
 
-3.) Start `Postgres` and `Redis` with `Docker`
+3.) Start `Postgres` and `Redis` with `Docker`:
    ```bash
    docker compose up -d
    ```
+
+4.) Setting up `.env`:
+
+
+5.) Initialize the database schema:
+   ```bash
+   npm run db:init
+   ```
+
+6.) Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+Then, open the following link:
+http://localhost:<`PORT_NUMBER`>
