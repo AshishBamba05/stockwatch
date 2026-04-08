@@ -100,11 +100,13 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 ## 👨‍💻 Software Engineering Design Decisions
 
-**1. Building 16 REST endpoints**
+### 1. Building 16 REST endpoints
 
-**2. Leveraging Redis Caching + WebSockets connection to stream live price feed**
+### 2. Leveraging Redis Caching + WebSockets connection to stream live price feed
 
-**3. 
+### 3. Postgres Database
+
+### 4. Docker Containerization
 
 
 
