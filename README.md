@@ -44,32 +44,32 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 ## 🏗️ Project Structure
 
 **App Entry**:
-   - `src/index.ts`
+   - [`src/index.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/index.ts)
 
 **Config/Infrastrcture**:
-   - `src/config.ts`
-   - `src/env.ts`
-   - `src/db.ts`
-   - `src/redis.ts`
-   - `docker-compose.yml`
+   - [`src/config.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/config.ts)
+   - [`src/env.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/env.ts)
+   - [`src/db.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/db.ts)
+   - [`src/redis.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/redis.ts)
+   - [`docker-compose.yml`](https://github.com/AshishBamba05/stockwatch/blob/main/docker-compose.yml)
 
 **HTTP Routes**:
-   - `src/routes/symbols.ts`
-   - `src/routes/watchlists.ts`
-   - `src/routes/positions.ts`
-   - `src/routes/alerts.ts`
+   - [`src/routes/symbols.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/routes/symbols.ts)
+   - [`src/routes/watchlists.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/routes/watchlists.ts)
+   - [`src/routes/positions.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/routes/positions.ts)
+   - [`src/routes/alerts.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/routes/alerts.ts)
 
 **Realtime / Market Data**
-   - `src/ws.ts`
-   - `src/prices/provider.ts`
-   - `src/prices/service.ts`
-   - `src/alerts/engine.ts`
-   - `src/market.ts`
+   - [`src/ws.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/ws.ts)
+   - [`src/prices/provider.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/prices/provider.ts)
+   - [`src/prices/service.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/prices/service.ts)
+   - [`src/alerts/engine.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/alerts/engine.ts)
+   - [`src/market.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/market.ts)
 
 **Data / Session Model**
    - [`db/schema.sql`](https://github.com/AshishBamba05/stockwatch/blob/main/db/schema.sql)
-   - `scripts/db-init.js`
-   - `src/session.ts`
+   - [`scripts/db-init.js`](https://github.com/AshishBamba05/stockwatch/blob/main/scripts/db-init.js)
+   - [`src/session.ts`](https://github.com/AshishBamba05/stockwatch/blob/main/src/session.ts)
 
 ---
 
