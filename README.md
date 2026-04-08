@@ -76,22 +76,24 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 ## 📸 Screenshots / Demo
 
 ## Session Storage
-![Session Storage Screenshot](path/to/session-storage.png)
+<img width="495" height="288" alt="Screenshot 2026-04-07 at 11 31 16 PM" src="https://github.com/user-attachments/assets/08956104-3303-4d43-84ba-cdd92ce30b6d" />
+
 
 ## Price Live Stream
-![Price Live Stream Screenshot](path/to/price-live-stream.png)
+)<img width="898" height="287" alt="Screenshot 2026-04-07 at 11 31 30 PM" src="https://github.com/user-attachments/assets/10e356bd-015c-4b45-aaa5-bac0cc912338" />
 
 ## Trade Execution
-![Trade Execution Screenshot](path/to/trade-execution.png)
+<img width="464" height="245" alt="Screenshot 2026-04-07 at 11 32 06 PM" src="https://github.com/user-attachments/assets/2d3d0fb7-59fa-4400-bca6-abf2c3464245" />
 
 ## Watchlist
-![Watchlist Screenshot](path/to/watchlist.png)
+<img width="484" height="235" alt="Screenshot 2026-04-07 at 11 32 21 PM" src="https://github.com/user-attachments/assets/bab9793b-4eaf-4bc3-a067-f39a6bc59437" />
 
 ## Alerts
-![Alerts Screenshot](path/to/alerts.png)
+<img width="478" height="348" alt="Screenshot 2026-04-07 at 11 32 37 PM" src="https://github.com/user-attachments/assets/9ba0e347-d711-4787-8900-c2494afa1abc" />
 
 ## Activity Feed
-![Activity Feed Screenshot](path/to/activity-feed.png)
+<img width="487" height="439" alt="Screenshot 2026-04-07 at 11 32 50 PM" src="https://github.com/user-attachments/assets/61b9cd29-7025-4cee-9a8b-0c911c375b9f" />
+
 
 ---
 
