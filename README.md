@@ -50,7 +50,7 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 ---
 
 
-## Software Engineering Design Decisions
+## 👨‍💻 Software Engineering Design Decisions
 
 
 
