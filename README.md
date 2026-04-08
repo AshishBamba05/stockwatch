@@ -75,12 +75,23 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 ## 📸 Screenshots / Demo
 
-Session Storage
-Price Live Stream
-Trade Execution
-Watchlist
-Alerts
-Activity Feed
+## Session Storage
+![Session Storage Screenshot](path/to/session-storage.png)
+
+## Price Live Stream
+![Price Live Stream Screenshot](path/to/price-live-stream.png)
+
+## Trade Execution
+![Trade Execution Screenshot](path/to/trade-execution.png)
+
+## Watchlist
+![Watchlist Screenshot](path/to/watchlist.png)
+
+## Alerts
+![Alerts Screenshot](path/to/alerts.png)
+
+## Activity Feed
+![Activity Feed Screenshot](path/to/activity-feed.png)
 
 ---
 
