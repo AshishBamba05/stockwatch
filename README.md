@@ -104,6 +104,8 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 ### 2. Leveraging Redis Caching + WebSockets connection to stream live price feed
 
+I wanted to make StockWatch simulate real-world stock trading, and I knew a big part of that would come down to making the simulated price updates instantaneous to make it feel "live". Here's the pipeline I built to address this need: 
+
 ### 3. Postgres Database
 
 ### 4. Docker Containerization
