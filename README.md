@@ -8,9 +8,9 @@ This project is licensed under the [MIT License](./LICENSE) © 2025 Ashish Bamba
 
 ## 📌 Overview
 
-**Stocktrackr** is a full-stack platform with a heavy backend (Node/Express + WebSockets) and a light frontend (HTML/CSS + JS), layered with data engine (Postgres + Redis).
+**Stocktrackr** is a full-stack platform with a heavy backend (`Node`/`Express` + `WebSockets`) and a light frontend (`HTML`/`CSS` + `JS`), layered with data engine (`Postgres` + `Redis`).
 
-Users can view live simulated stock prices for AAPL, GOOG, and MSFT, execute trades (buy/sell), receive alerts if stock crosses a price threshold they set up, and view their profit/loss margins all in a stored session.
+Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execute trades (buy/sell), receive alerts if stock crosses a price threshold they set up, and view their profit/loss margins all in a stored session.
 
 **Built for speed and reliability — sub-200 ms price streaming with Redis caching and polling.**
 
