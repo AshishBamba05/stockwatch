@@ -75,11 +75,6 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 ## 📸 Screenshots / Demo
 
----
-
-
-## 👨‍💻 Software Engineering Design Decisions
-
 Session Storage
 Price Live Stream
 Trade Execution
@@ -87,6 +82,10 @@ Watchlist
 Alerts
 Activity Feed
 
+---
+
+
+## 👨‍💻 Software Engineering Design Decisions
 
 
 ## 📦 Installation
