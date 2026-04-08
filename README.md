@@ -55,5 +55,14 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
    ```bash
    git clone https://github.com/AshishBamba05/stocktrackr.git
    cd stocktrackr
+   ```
 
+2.) Install Node dependencies
+   ```bash
+   npm install
+   ```
 
+3.) Start Postgres and Redis with Docker
+   ```bash
+   docker compose up -d
+   ```
