@@ -115,7 +115,7 @@ I wanted to make StockWatch simulate real-world stock trading, and I knew a big 
    - NOTE: In this project, Redis is used via the iosredis Node package.
 
 - Live, automatic display on frontend interface via WebSockets:
-   - 
+   - WebSockets keeps one API connection open, so it can continuously update the price feed display on the interface, as opposed to having to send an HTTP request from frontend interface every time a user wants to get the latest prices.
 
 ### 3. Postgres Database
 
