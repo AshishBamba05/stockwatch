@@ -37,18 +37,11 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 ---
 
-## ⚡ Architecture Overview
-
-[ Client (React + TS) ] <--> [ Express API ] <--> [ PostgreSQL ]
-↑
-| WebSockets (real-time updates)
-↓
-[ Redis Cache ]
+## 🚀 How It Works
 
 
-- Prices cached in Redis to reduce redundant API calls  
-- Alerts & portfolio updates pushed via WebSockets  
-- PostgreSQL stores persistent user data, trades, and watchlists  
+
+## 🏗️ Project Structure
 
 ---
 
