@@ -43,6 +43,19 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 ## 🏗️ Project Structure
 
+App Entry
+   `src/index.ts`
+
+Config/Infrastrcture
+   `src/config.ts`
+   `src/env.ts`
+   `src/db.ts`
+   `src/redis.ts`
+   `docker-compose.yml`
+
+HTTP Routes
+
+
 ---
 
 ## 📸 Screenshots / Demo
