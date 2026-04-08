@@ -100,7 +100,9 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 ## 👨‍💻 Software Engineering Design Decisions
 
-### 1. Building 16 REST endpoints
+### 1. CRUD workflow (16 REST endpoints)
+
+To make the app more flexible, I integrated a CRUD workflow with multiple REST endpoints that manage a **Create, Read, Update,** and **Delete** tasks workflow.
 
 `/symbols`: 1
    -  `GET /symbols`
