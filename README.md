@@ -102,6 +102,31 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 ### 1. Building 16 REST endpoints
 
+`/symbols`: 1
+   -  `GET /symbols`
+
+`/watchlists`: 6
+   -  `GET /watchlists`
+   -  `POST /watchlists`
+   -  `PUT /watchlists/:id`
+   -  `DELETE /watchlists/:id`
+   -  `POST /watchlists/:id/items`
+   -  `DELETE /watchlists/:id/items/:symbol`
+
+`/positions`: 5
+   -  `GET /positions`
+   -  `POST /positions`
+   -  `PUT /positions/:symbol`
+   -  `DELETE /positions/:symbol`
+   -  `POST /positions/execute`
+
+`/alerts`: 4
+   -  `GET /alerts`
+   -  `POST /alerts`
+   -  `PUT /alerts/:id`
+   -  `DELETE /alerts/:id`
+
+
 ### 2. Leveraging Redis Caching + WebSockets connection to stream live price feed
 
 I wanted to make StockWatch simulate real-world stock trading, and I knew a big part of that would come down to making the simulated price updates instantaneous to make it feel "live". Here's the pipeline I built to address this need: 
