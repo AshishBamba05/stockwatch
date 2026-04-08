@@ -30,9 +30,9 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 |--------------|--------------------|
 | **Backend**  | NodeJS, ExpressJS, TypeScript, WebSockets |
 | **Database** | PostgreSQL  |
-| **Caching** | Redis  |
+| **Caching / Realtime** | Redis  |
 | **Containerization** | Docker, Docker Compose |
-| **Frontend** | HTML5 |
+| **Frontend** | HTML, CSS, vanilla JavaScript |
 | **Deployment:** | |
 
 ---
