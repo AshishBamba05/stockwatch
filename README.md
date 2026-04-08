@@ -111,9 +111,10 @@ I wanted to make StockWatch simulate real-world stock trading, and I knew a big 
 
 - Fetching Prices To Redis:
    - In src/prices/service.ts, we take those computed prices and fetch them into the Redis cache. In this context, "cache" means: store the latest known price so the backend can access it quickly.
+     
    - NOTE: In this project, Redis is used via the iosredis Node package.
 
-- Live, automatic display on frontend interface via WebSockets
+- Live, automatic display on frontend interface via WebSockets:
    - 
 
 ### 3. Postgres Database
