@@ -52,7 +52,7 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 ## 📦 Installation
 
 
-1. Clone the repository:
+1.) Clone the repository:
    ```bash
    git clone https://github.com/AshishBamba05/stocktrackr.git
    cd stocktrackr
