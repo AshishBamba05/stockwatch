@@ -53,8 +53,23 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
    - `src/redis.ts`
    - `docker-compose.yml`
 
-HTTP Routes
+**HTTP Routes**:
+   - `src/routes/symbols.ts`
+   - `src/routes/watchlists.ts`
+   - `src/routes/positions.ts`
+   - `src/routes/alerts.ts`
 
+**Realtime / Market Data**
+   - `src/ws.ts`
+   - `src/prices/provider.ts`
+   - `src/prices/service.ts`
+   - `src/alerts/engine.ts`
+   - `src/market.ts`
+
+**Data / Session Model**
+   - [`db/schema.sql`](https://github.com/AshishBamba05/stockwatch/blob/main/db/schema.sql)
+   - `scripts/db-init.js`
+   - `src/session.ts`
 
 ---
 
