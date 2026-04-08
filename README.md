@@ -82,4 +82,4 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
    ```
 
 Then, open the following link:
-http://localhost:<`PORT_NUMBER`>
+`http://localhost:<PORT_NUMBER>`
