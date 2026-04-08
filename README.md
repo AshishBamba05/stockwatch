@@ -108,11 +108,13 @@ I wanted to make StockWatch simulate real-world stock trading, and I knew a big 
 
 - Computing Prices in src/prices/provider.ts:
    - It sets starting prices for each stocks, then continuously updates them with a random step.
+ 
+   - NOTE: Prices updates are configured to occur at every 750 ms intervals.
 
 - Fetching Prices To Redis:
    - In src/prices/service.ts, we take those computed prices and fetch them into the Redis cache. In this context, "cache" means: store the latest known price so the backend can access it quickly.
      
-   - NOTE: In this project, Redis is used via the iosredis Node package.
+   - NOTE: In this project, Redis is used via the `iosredis` Node package.
 
 - Live, automatic display on frontend interface via WebSockets:
    - WebSockets keeps one API connection open, so it can continuously update the price feed display on the interface, as opposed to having to send an HTTP request from frontend interface every time a user wants to get the latest prices.
