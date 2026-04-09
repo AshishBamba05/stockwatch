@@ -104,6 +104,14 @@ Users can view live simulated stock prices for `AAPL`, `GOOG`, and `MSFT`, execu
 
 To make the app more flexible, I integrated a CRUD workflow with multiple REST endpoints that manage a **Create, Read, Update,** and **Delete** tasks workflow.
 
+For REST APIs, the CRUD mapping is:
+   - Create → POST
+   - Read → GET
+   - Update → PUT
+   - Delete → DELETE
+
+Here's how this corresponds in my project:
+
 `/symbols`: 1
    -  `GET /symbols`
 
