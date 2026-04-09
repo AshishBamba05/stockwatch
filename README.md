@@ -155,6 +155,8 @@ I wanted to make StockWatch simulate real-world stock trading, and I knew a big 
       - `price:<SYMBOL>`: ->  latest price value
       - `price:ts:<SYMBOL>` -> latest timestamp
 
+   The values are instantaneously updated via caching.
+
 - Live, automatic display on frontend interface via WebSockets:
    - WebSockets keeps one API connection open, so it can continuously update the price feed display on the interface, as opposed to having to send an HTTP request from frontend interface every time a user wants to get the latest prices.
 
