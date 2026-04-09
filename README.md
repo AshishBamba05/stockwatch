@@ -142,13 +142,17 @@ I wanted to make StockWatch simulate real-world stock trading, and I knew a big 
    - In src/prices/service.ts, we take those computed prices and fetch them into the Redis cache. In this context, "cache" means: store the latest known price so the backend can access it quickly.
      
    - NOTE: In this project, Redis is used via the `iosredis` Node package.
+     
+   - NOTE: Redis is a type of NoSQL database that leverages key-value data storage with the following structure:
+      - `price:<SYMBOL>`: ->  latest price value
+      - `price:ts:<SYMBOL>` -> latest timestamp
 
 - Live, automatic display on frontend interface via WebSockets:
    - WebSockets keeps one API connection open, so it can continuously update the price feed display on the interface, as opposed to having to send an HTTP request from frontend interface every time a user wants to get the latest prices.
 
 ### 3. Postgres Database
 
-I wanted to integrate session-based data storage into StockWatch, so I leveraged PostgreSQL. A relational database with SQL structure makes most sense here because I need there to be a structured data consisting of user flows (watchlists, trade executions, alert engine) to a `specific session_id`. Every time a user creates a new `session_id` and performs an action, a new row in the SQL database appears with the same available categories.
+I wanted to integrate session-based data storage into StockWatch, so I leveraged PostgreSQL. A relational database with SQL structure makes most sense here because I need there to be a structured data consisting of user flows (watchlists, trade executions, alert engine) to a specific `session_id`. Every time a user creates a new `session_id` and performs an action, a new row in the SQL database appears with the same available categories.
 
 ### 4. Docker Containerization
 
