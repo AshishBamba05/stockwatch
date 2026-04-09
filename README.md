@@ -148,6 +148,8 @@ I wanted to make StockWatch simulate real-world stock trading, and I knew a big 
 
 ### 3. Postgres Database
 
+I wanted to integrate session-based data storage into StockWatch, so I leveraged PostgreSQL. A relational database with SQL structure makes most sense here because I need there to be a structured data consisting of user flows (watchlists, trade executions, alert engine) to a specific session ID. Every time a user creates a new Session ID, a new row in the SQL database appears with the same available categories.
+
 ### 4. Docker Containerization
 
 I integrated Docker to ease the burden of installing dependencies. Instead of having to seperate download both Redis and PsotgreSQL, `docker compose up -d` brings up the data layer quickly so everyone gets the same layers and version setup of all dependencies.
