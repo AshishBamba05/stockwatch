@@ -1014,14 +1014,14 @@
 
     <div class="title-row" style="margin: 26px 0 22px;">
       <section class="tabs" role="tablist">
-        <button type="button" class="tab-btn main-tab-btn" data-main-tab="profile" id="mainTabProfile" role="tab" aria-selected="false">Profile</button>
-        <button type="button" class="tab-btn main-tab-btn active" data-main-tab="trade" id="mainTabTrade" role="tab" aria-selected="true">Trade</button>
+        <button type="button" class="tab-btn main-tab-btn active" data-main-tab="profile" id="mainTabProfile" role="tab" aria-selected="true">Profile</button>
+        <button type="button" class="tab-btn main-tab-btn" data-main-tab="trade" id="mainTabTrade" role="tab" aria-selected="false">Trade</button>
         <button type="button" class="tab-btn main-tab-btn" data-main-tab="settings" id="mainTabSettings" role="tab" aria-selected="false">Settings</button>
       </section>
       <button class="secondary btn-small" id="refreshAll" type="button">Refresh</button>
     </div>
 
-    <div class="main-panel" id="mainPanelProfile" hidden>
+    <div class="main-panel" id="mainPanelProfile">
       <article class="panel">
         <div class="panel-header">
           <div>
@@ -1060,7 +1060,7 @@
       </article>
     </div>
 
-    <div class="main-panel" id="mainPanelTrade">
+    <div class="main-panel" id="mainPanelTrade" hidden>
       <article class="panel" style="margin-bottom: 26px;">
         <div class="panel-header">
           <div>
@@ -1933,6 +1933,7 @@
       renderPrices();
       updateSummary();
       updateIdentityLine();
+      renderProfile();
       try {
         if (isFirstBoot) await seedStarterPosition(isGuest);
         await refreshAll();
