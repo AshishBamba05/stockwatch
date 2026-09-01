@@ -398,31 +398,86 @@
       position: fixed;
       top: 16px;
       right: 16px;
-      z-index: 20;
+      z-index: 30;
+      font-family: var(--font-mono);
+    }
+
+    .style-picker-trigger {
+      width: auto;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: var(--radius-pill);
       background: var(--panel-strong);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(var(--line-rgb), 0.14);
-      box-shadow: var(--shadow-panel);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.15), 0 0 18px rgba(var(--accent-rgb), 0.25);
+      transition: box-shadow 160ms ease, transform 160ms ease;
     }
 
-    .style-picker label {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      white-space: nowrap;
+    .style-picker-trigger:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.25), 0 0 24px rgba(var(--accent-rgb), 0.4);
     }
 
-    .style-picker select {
-      width: auto;
-      padding: 8px 10px;
-      font-size: 0.82rem;
+    .style-picker-trigger::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+      margin-top: -4px;
+    }
+
+    .style-picker-menu {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 220px;
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--bg-deep);
+      border: 1px solid rgba(var(--accent-rgb), 0.22);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    }
+
+    .style-picker-menu[hidden] {
+      display: none;
+    }
+
+    .style-picker-option {
+      width: 100%;
+      text-align: left;
+      padding: 13px 18px;
+      border-radius: var(--radius-pill);
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+    }
+
+    .style-picker-option:hover {
+      background: rgba(var(--ink-rgb), 0.06);
+    }
+
+    .style-picker-option.active {
+      background: rgba(var(--accent-rgb), 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 700;
     }
 
     .panel {
@@ -904,23 +959,25 @@
   </style>
 </head>
 <body>
-  <div class="style-picker">
-    <label for="stylePicker">Design</label>
-    <select id="stylePicker">
-      <option value="aurora">Aurora Glass (Default)</option>
-      <option value="ticker">Ticker Tape</option>
-      <option value="ledger">Ledger &amp; Ink</option>
-      <option value="terminal">Quant Terminal</option>
-      <option value="cash">Cash &amp; Ease</option>
-    </select>
+  <div class="style-picker" id="stylePickerWrap">
+    <button type="button" class="style-picker-trigger" id="stylePickerTrigger" aria-haspopup="listbox" aria-expanded="false">
+      <span id="stylePickerTriggerLabel">Aurora Glass</span>
+    </button>
+    <div class="style-picker-menu" id="stylePickerMenu" role="listbox" hidden>
+      <button type="button" class="style-picker-option" data-value="aurora" role="option">Aurora Glass</button>
+      <button type="button" class="style-picker-option" data-value="ticker" role="option">Ticker Tape</button>
+      <button type="button" class="style-picker-option" data-value="ledger" role="option">Ledger &amp; Ink</button>
+      <button type="button" class="style-picker-option" data-value="terminal" role="option">Quant Terminal</button>
+      <button type="button" class="style-picker-option" data-value="cash" role="option">Cash &amp; Ease</button>
+    </div>
   </div>
 
   <div id="landing">
     <div class="landing">
       <div class="landing-card">
         <span class="eyebrow">Real-Time Market Control</span>
-        <h1>Trade faster.</h1>
-        <p>Live quotes, fast trade execution, and smart price alerts — all in one dashboard. Everyone starts with $10,000 in simulated cash.</p>
+        <h1>StockWatch</h1>
+        <p>Trade faster. Live quotes, fast trade execution, and smart price alerts — all in one dashboard. Everyone starts with $10,000 in simulated cash.</p>
 
         <button type="button" id="guestButton">Continue as Guest</button>
 
@@ -951,8 +1008,8 @@
   <main id="app" hidden>
     <section class="hero">
       <span class="eyebrow">Real-Time Market Control</span>
-      <h1>Trade faster.</h1>
-      <p>Live quotes, fast trade execution, and smart price alerts — all in one dashboard.</p>
+      <h1>StockWatch</h1>
+      <p>Trade faster. Live quotes, fast trade execution, and smart price alerts — all in one dashboard.</p>
     </section>
 
     <div class="title-row" style="margin: 26px 0 22px;">
@@ -1648,12 +1705,47 @@
 
     document.getElementById('refreshAll').addEventListener('click', refreshAll);
 
-    const stylePicker = document.getElementById('stylePicker');
-    stylePicker.value = localStorage.getItem('stockwatch_ui_style') || 'aurora';
-    stylePicker.addEventListener('change', () => {
-      document.documentElement.setAttribute('data-style', stylePicker.value);
-      localStorage.setItem('stockwatch_ui_style', stylePicker.value);
+    const stylePickerTrigger = document.getElementById('stylePickerTrigger');
+    const stylePickerTriggerLabel = document.getElementById('stylePickerTriggerLabel');
+    const stylePickerMenu = document.getElementById('stylePickerMenu');
+    const stylePickerOptions = document.querySelectorAll('.style-picker-option');
+
+    function applyStyle(value) {
+      document.documentElement.setAttribute('data-style', value);
+      localStorage.setItem('stockwatch_ui_style', value);
+      stylePickerOptions.forEach((option) => {
+        option.classList.toggle('active', option.dataset.value === value);
+        if (option.dataset.value === value) {
+          stylePickerTriggerLabel.textContent = option.textContent;
+        }
+      });
+    }
+
+    function closeStylePickerMenu() {
+      stylePickerMenu.hidden = true;
+      stylePickerTrigger.setAttribute('aria-expanded', 'false');
+    }
+
+    stylePickerTrigger.addEventListener('click', () => {
+      const willOpen = stylePickerMenu.hidden;
+      stylePickerMenu.hidden = !willOpen;
+      stylePickerTrigger.setAttribute('aria-expanded', String(willOpen));
     });
+
+    stylePickerOptions.forEach((option) => {
+      option.addEventListener('click', () => {
+        applyStyle(option.dataset.value);
+        closeStylePickerMenu();
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!document.getElementById('stylePickerWrap').contains(event.target)) {
+        closeStylePickerMenu();
+      }
+    });
+
+    applyStyle(localStorage.getItem('stockwatch_ui_style') || 'aurora');
 
     document.getElementById('logoutButton').addEventListener('click', () => {
       clearIdentity();
