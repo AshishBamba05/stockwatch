@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { db } from '../db';
+import { asyncHandler } from '../asyncHandler';
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', asyncHandler(async (req, res) => {
   const q = String(req.query.q || '').toUpperCase();
   if (!q) {
     const r = await db.query('SELECT symbol, name FROM symbols ORDER BY symbol LIMIT 100');
@@ -15,6 +16,6 @@ router.get('/', async (req, res) => {
     [q + '%', '%' + q + '%']
   );
   res.json(r.rows);
-});
+}));
 
 export default router;

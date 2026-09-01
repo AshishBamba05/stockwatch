@@ -2,10 +2,19 @@ import { Router } from 'express';
 import { db } from '../db';
 import { getLivePrice } from '../market';
 import { getSessionId } from '../session';
+import { asyncHandler } from '../asyncHandler';
+import { creditBalance, deductBalance } from '../account';
+import { getWsHub } from '../wsHub';
+
+function notifyLeaderboardChanged(sessionId: string) {
+  if (sessionId.startsWith('user:')) {
+    getWsHub()?.broadcastAll({ type: 'leaderboard' });
+  }
+}
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', asyncHandler(async (req, res) => {
   const sessionId = getSessionId(req);
   if (!sessionId) return res.status(400).json({ error: 'Missing X-Session-Id' });
 
@@ -23,9 +32,9 @@ router.get('/', async (req, res) => {
   }
 
   res.json(out);
-});
+}));
 
-router.post('/', async (req, res) => {
+router.post('/', asyncHandler(async (req, res) => {
   const sessionId = getSessionId(req);
   if (!sessionId) return res.status(400).json({ error: 'Missing X-Session-Id' });
 
@@ -33,6 +42,9 @@ router.post('/', async (req, res) => {
   if (!symbol || quantity == null || avg_cost == null) {
     return res.status(400).json({ error: 'symbol, quantity, avg_cost required' });
   }
+
+  const symbolExists = await db.query('SELECT 1 FROM symbols WHERE symbol=$1', [String(symbol).toUpperCase()]);
+  if (!symbolExists.rows.length) return res.status(400).json({ error: 'Unknown symbol' });
 
   const r = await db.query(
     `INSERT INTO positions(session_id, symbol, quantity, avg_cost)
@@ -44,9 +56,9 @@ router.post('/', async (req, res) => {
   );
 
   res.json(r.rows[0]);
-});
+}));
 
-router.put('/:symbol', async (req, res) => {
+router.put('/:symbol', asyncHandler(async (req, res) => {
   const sessionId = getSessionId(req);
   if (!sessionId) return res.status(400).json({ error: 'Missing X-Session-Id' });
 
@@ -67,9 +79,9 @@ router.put('/:symbol', async (req, res) => {
 
   if (!r.rows.length) return res.status(404).json({ error: 'position not found' });
   res.json(r.rows[0]);
-});
+}));
 
-router.delete('/:symbol', async (req, res) => {
+router.delete('/:symbol', asyncHandler(async (req, res) => {
   const sessionId = getSessionId(req);
   if (!sessionId) return res.status(400).json({ error: 'Missing X-Session-Id' });
 
@@ -81,9 +93,9 @@ router.delete('/:symbol', async (req, res) => {
 
   if (!r.rows.length) return res.status(404).json({ error: 'position not found' });
   res.json({ ok: true, symbol });
-});
+}));
 
-router.post('/execute', async (req, res) => {
+router.post('/execute', asyncHandler(async (req, res) => {
   const sessionId = getSessionId(req);
   if (!sessionId) return res.status(400).json({ error: 'Missing X-Session-Id' });
 
@@ -110,6 +122,12 @@ router.post('/execute', async (req, res) => {
   const currentAvgCost = existing?.avg_cost ?? executionPrice;
 
   if (side === 'buy') {
+    const cost = quantity * executionPrice;
+    const cashBalance = await deductBalance(sessionId, cost);
+    if (cashBalance == null) {
+      return res.status(409).json({ error: 'Insufficient funds' });
+    }
+
     const nextQuantity = currentQuantity + quantity;
     const nextAvgCost = ((currentQuantity * currentAvgCost) + (quantity * executionPrice)) / nextQuantity;
 
@@ -122,12 +140,14 @@ router.post('/execute', async (req, res) => {
       [sessionId, symbol, nextQuantity, nextAvgCost]
     );
 
+    notifyLeaderboardChanged(sessionId);
     return res.json({
       type: 'trade_execution',
       side,
       symbol,
       executed_quantity: quantity,
       execution_price: executionPrice,
+      cash_balance: cashBalance,
       position: r.rows[0]
     });
   }
@@ -138,9 +158,11 @@ router.post('/execute', async (req, res) => {
 
   const nextQuantity = currentQuantity - quantity;
   const realizedPnl = (executionPrice - currentAvgCost) * quantity;
+  const cashBalance = await creditBalance(sessionId, quantity * executionPrice);
 
   if (nextQuantity === 0) {
     await db.query('DELETE FROM positions WHERE session_id=$1 AND symbol=$2', [sessionId, symbol]);
+    notifyLeaderboardChanged(sessionId);
     return res.json({
       type: 'trade_execution',
       side,
@@ -148,6 +170,7 @@ router.post('/execute', async (req, res) => {
       executed_quantity: quantity,
       execution_price: executionPrice,
       realized_pnl: realizedPnl,
+      cash_balance: cashBalance,
       position: null
     });
   }
@@ -160,6 +183,7 @@ router.post('/execute', async (req, res) => {
     [sessionId, symbol, nextQuantity]
   );
 
+  notifyLeaderboardChanged(sessionId);
   res.json({
     type: 'trade_execution',
     side,
@@ -167,8 +191,9 @@ router.post('/execute', async (req, res) => {
     executed_quantity: quantity,
     execution_price: executionPrice,
     realized_pnl: realizedPnl,
+    cash_balance: cashBalance,
     position: r.rows[0]
   });
-});
+}));
 
 export default router;

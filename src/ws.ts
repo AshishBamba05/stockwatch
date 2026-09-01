@@ -4,6 +4,7 @@ type ClientInfo = { ws: WebSocket; sessionId: string | null; subs: Set<string> }
 export type WebSocketHub = {
   notifySession: (sessionId: string, msg: any) => void;
   broadcastPrice: (symbol: string, payload: any) => void;
+  broadcastAll: (msg: any) => void;
 };
 
 export function createWsServer(server: any): WebSocketHub {
@@ -64,6 +65,13 @@ export function createWsServer(server: any): WebSocketHub {
       for (const c of clients) {
         if (c.subs.has(sym) && c.ws.readyState === WebSocket.OPEN) {
           c.ws.send(JSON.stringify({ type: 'price', payload }));
+        }
+      }
+    },
+    broadcastAll(msg) {
+      for (const c of clients) {
+        if (c.ws.readyState === WebSocket.OPEN) {
+          c.ws.send(JSON.stringify(msg));
         }
       }
     }

@@ -2,10 +2,11 @@ import { Router } from 'express';
 import { db } from '../db';
 import { getLivePrice } from '../market';
 import { getSessionId } from '../session';
+import { asyncHandler } from '../asyncHandler';
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', asyncHandler(async (req, res) => {
   const sessionId = getSessionId(req);
   if (!sessionId) return res.status(400).json({ error: 'Missing X-Session-Id' });
 
@@ -24,9 +25,9 @@ router.get('/', async (req, res) => {
   );
 
   res.json(r.rows);
-});
+}));
 
-router.post('/', async (req, res) => {
+router.post('/', asyncHandler(async (req, res) => {
   const sessionId = getSessionId(req);
   if (!sessionId) return res.status(400).json({ error: 'Missing X-Session-Id' });
 
@@ -36,6 +37,9 @@ router.post('/', async (req, res) => {
   if (!symbol) {
     return res.status(400).json({ error: 'symbol required' });
   }
+
+  const symbolExists = await db.query('SELECT 1 FROM symbols WHERE symbol=$1', [symbol]);
+  if (!symbolExists.rows.length) return res.status(400).json({ error: 'Unknown symbol' });
 
   if (alertType === 'price_threshold') {
     const direction = String(req.body?.direction || '');
@@ -81,9 +85,9 @@ router.post('/', async (req, res) => {
   );
 
   res.json(r.rows[0]);
-});
+}));
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', asyncHandler(async (req, res) => {
   const sessionId = getSessionId(req);
   if (!sessionId) return res.status(400).json({ error: 'Missing X-Session-Id' });
 
@@ -101,6 +105,9 @@ router.put('/:id', async (req, res) => {
 
   const alertType = String(req.body?.alert_type || existing.rows[0].alert_type);
   const symbol = String(req.body?.symbol || existing.rows[0].symbol).toUpperCase();
+
+  const symbolExists = await db.query('SELECT 1 FROM symbols WHERE symbol=$1', [symbol]);
+  if (!symbolExists.rows.length) return res.status(400).json({ error: 'Unknown symbol' });
 
   if (alertType === 'price_threshold') {
     const direction = String(req.body?.direction || '');
@@ -147,15 +154,15 @@ router.put('/:id', async (req, res) => {
   );
 
   res.json(r.rows[0]);
-});
+}));
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', asyncHandler(async (req, res) => {
   const sessionId = getSessionId(req);
   if (!sessionId) return res.status(400).json({ error: 'Missing X-Session-Id' });
 
   const r = await db.query('DELETE FROM alerts WHERE id=$1 AND session_id=$2 RETURNING id', [req.params.id, sessionId]);
   if (!r.rows.length) return res.status(404).json({ error: 'alert not found' });
   res.json({ ok: true, id: Number(req.params.id) });
-});
+}));
 
 export default router;

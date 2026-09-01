@@ -17,21 +17,19 @@ INSERT INTO symbols(symbol, name) VALUES
 ('GOOG','Alphabet')
 ON CONFLICT DO NOTHING;
 
--- Watchlists (scoped to a session/browser)
-CREATE TABLE IF NOT EXISTS watchlists (
+-- Registered accounts (guests never get a row here)
+CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
-  session_id TEXT NOT NULL,
-  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_watchlists_session ON watchlists(session_id);
-
-CREATE TABLE IF NOT EXISTS watchlist_items (
-  id SERIAL PRIMARY KEY,
-  watchlist_id INTEGER NOT NULL REFERENCES watchlists(id) ON DELETE CASCADE,
-  symbol TEXT NOT NULL REFERENCES symbols(symbol) ON DELETE RESTRICT,
-  UNIQUE(watchlist_id, symbol)
+-- Cash balance per session (guest or registered), seeded with starting capital
+CREATE TABLE IF NOT EXISTS account_balances (
+  session_id TEXT PRIMARY KEY,
+  cash_balance NUMERIC NOT NULL DEFAULT 10000,
+  created_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- Positions (scoped to a session/browser)

@@ -4,25 +4,180 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>StockWatch Dashboard</title>
+  <script>
+    (function () {
+      var style = localStorage.getItem('stockwatch_ui_style') || 'aurora';
+      document.documentElement.setAttribute('data-style', style);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@600;700;800&family=Work+Sans:wght@400;500;600&display=swap" />
   <style>
-    :root {
+    :root,
+    :root[data-style="aurora"] {
       --bg: #07111f;
       --bg-deep: #040912;
+      --bg-deep-rgb: 4, 9, 18;
       --panel: rgba(9, 22, 39, 0.82);
       --panel-strong: rgba(10, 26, 45, 0.96);
-      --panel-soft: rgba(255, 255, 255, 0.03);
       --line: rgba(153, 205, 255, 0.12);
       --line-strong: rgba(153, 205, 255, 0.24);
+      --line-rgb: 153, 205, 255;
       --ink: #edf5ff;
+      --ink-rgb: 237, 245, 255;
       --muted: #8da3bd;
       --accent: #61e7c2;
+      --accent-rgb: 97, 231, 194;
       --accent-2: #67a9ff;
+      --accent-2-rgb: 103, 169, 255;
       --rise: #67f0aa;
       --fall: #ff7f8f;
+      --fall-rgb: 255, 127, 143;
       --warn: #ffd166;
+      --warn-rgb: 255, 209, 102;
+      --on-accent: #05111d;
       --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+      --shadow-panel: 0 16px 44px rgba(0, 0, 0, 0.26);
       --radius: 26px;
       --radius-sm: 18px;
+      --radius-pill: 999px;
+      --decor-opacity: 1;
+      --font-display: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+      --font-body: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+      --font-mono: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+    }
+
+    :root[data-style="ticker"] {
+      --bg: #14120e;
+      --bg-deep: #0c0a07;
+      --bg-deep-rgb: 12, 10, 7;
+      --panel: #1c1810;
+      --panel-strong: #221d15;
+      --line: rgba(240, 166, 62, 0.16);
+      --line-strong: rgba(240, 166, 62, 0.3);
+      --line-rgb: 240, 166, 62;
+      --ink: #f4ead2;
+      --ink-rgb: 244, 234, 210;
+      --muted: #9c8f74;
+      --accent: #f0a63e;
+      --accent-rgb: 240, 166, 62;
+      --accent-2: #e2704f;
+      --accent-2-rgb: 226, 112, 79;
+      --rise: #7fc98a;
+      --fall: #e2704f;
+      --fall-rgb: 226, 112, 79;
+      --warn: #f0a63e;
+      --warn-rgb: 240, 166, 62;
+      --on-accent: #1c1408;
+      --shadow: 0 20px 46px rgba(0, 0, 0, 0.5);
+      --shadow-panel: 0 14px 32px rgba(0, 0, 0, 0.4);
+      --radius: 6px;
+      --radius-sm: 4px;
+      --radius-pill: 4px;
+      --decor-opacity: 0.55;
+      --font-display: "Big Shoulders Display", sans-serif;
+      --font-body: "IBM Plex Sans", sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+    }
+
+    :root[data-style="ledger"] {
+      --bg: #eceef0;
+      --bg-deep: #dfe2e5;
+      --bg-deep-rgb: 223, 226, 229;
+      --panel: #f7f8f9;
+      --panel-strong: #ffffff;
+      --line: rgba(31, 58, 95, 0.16);
+      --line-strong: rgba(31, 58, 95, 0.3);
+      --line-rgb: 31, 58, 95;
+      --ink: #171b20;
+      --ink-rgb: 23, 27, 32;
+      --muted: #5c6570;
+      --accent: #1f3a5f;
+      --accent-rgb: 31, 58, 95;
+      --accent-2: #2f6b4a;
+      --accent-2-rgb: 47, 107, 74;
+      --rise: #2f6b4a;
+      --fall: #8a2f28;
+      --fall-rgb: 138, 47, 40;
+      --warn: #a2621b;
+      --warn-rgb: 162, 98, 27;
+      --on-accent: #f2f4f6;
+      --shadow: 0 10px 26px rgba(23, 27, 32, 0.12);
+      --shadow-panel: 0 8px 18px rgba(23, 27, 32, 0.08);
+      --radius: 3px;
+      --radius-sm: 2px;
+      --radius-pill: 2px;
+      --decor-opacity: 0;
+      --font-display: "Fraunces", serif;
+      --font-body: "Public Sans", sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+    }
+
+    :root[data-style="terminal"] {
+      --bg: #0a0e14;
+      --bg-deep: #060810;
+      --bg-deep-rgb: 6, 8, 16;
+      --panel: #10151d;
+      --panel-strong: #151b24;
+      --line: rgba(87, 199, 227, 0.14);
+      --line-strong: rgba(87, 199, 227, 0.28);
+      --line-rgb: 87, 199, 227;
+      --ink: #dbe6ee;
+      --ink-rgb: 219, 230, 238;
+      --muted: #6f8296;
+      --accent: #57c7e3;
+      --accent-rgb: 87, 199, 227;
+      --accent-2: #e8a33d;
+      --accent-2-rgb: 232, 163, 61;
+      --rise: #4fd67a;
+      --fall: #ff5d5d;
+      --fall-rgb: 255, 93, 93;
+      --warn: #e8a33d;
+      --warn-rgb: 232, 163, 61;
+      --on-accent: #06232c;
+      --shadow: 0 20px 46px rgba(0, 0, 0, 0.5);
+      --shadow-panel: 0 14px 32px rgba(0, 0, 0, 0.42);
+      --radius: 8px;
+      --radius-sm: 5px;
+      --radius-pill: 5px;
+      --decor-opacity: 0.4;
+      --font-display: "IBM Plex Sans Condensed", sans-serif;
+      --font-body: "IBM Plex Sans", sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+    }
+
+    :root[data-style="cash"] {
+      --bg: #f7f4ef;
+      --bg-deep: #efeae1;
+      --bg-deep-rgb: 239, 234, 225;
+      --panel: #ffffff;
+      --panel-strong: #ffffff;
+      --line: rgba(255, 90, 54, 0.14);
+      --line-strong: rgba(255, 90, 54, 0.26);
+      --line-rgb: 255, 90, 54;
+      --ink: #1c1712;
+      --ink-rgb: 28, 23, 18;
+      --muted: #857c6d;
+      --accent: #ff5a36;
+      --accent-rgb: 255, 90, 54;
+      --accent-2: #1f9d55;
+      --accent-2-rgb: 31, 157, 85;
+      --rise: #1f9d55;
+      --fall: #e0483a;
+      --fall-rgb: 224, 72, 58;
+      --warn: #c98a1c;
+      --warn-rgb: 201, 138, 28;
+      --on-accent: #fff9f5;
+      --shadow: 0 16px 32px rgba(28, 23, 18, 0.1);
+      --shadow-panel: 0 10px 20px rgba(28, 23, 18, 0.07);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --radius-pill: 999px;
+      --decor-opacity: 0;
+      --font-display: "Sora", sans-serif;
+      --font-body: "Work Sans", sans-serif;
+      --font-mono: "Sora", sans-serif;
     }
 
     * {
@@ -37,12 +192,14 @@
       margin: 0;
       min-height: 100vh;
       color: var(--ink);
-      font-family: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+      font-family: var(--font-body);
       background:
-        radial-gradient(circle at 12% 18%, rgba(97, 231, 194, 0.17), transparent 28%),
-        radial-gradient(circle at 85% 10%, rgba(103, 169, 255, 0.18), transparent 26%),
-        radial-gradient(circle at 50% 100%, rgba(255, 209, 102, 0.12), transparent 20%),
-        linear-gradient(180deg, #091425 0%, var(--bg) 50%, var(--bg-deep) 100%);
+        radial-gradient(circle at 12% 18%, rgba(var(--accent-rgb), 0.17), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(var(--accent-2-rgb), 0.18), transparent 26%),
+        radial-gradient(circle at 50% 100%, rgba(var(--warn-rgb), 0.12), transparent 20%),
+        linear-gradient(180deg, var(--panel-strong) 0%, var(--bg) 50%, var(--bg-deep) 100%);
+      background-attachment: fixed;
+      transition: background 200ms ease, color 200ms ease;
       overflow-x: hidden;
     }
 
@@ -53,26 +210,131 @@
       inset: 0;
       pointer-events: none;
       z-index: 0;
+      opacity: var(--decor-opacity);
     }
 
     body::before {
       background-image:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(var(--ink-rgb), 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--ink-rgb), 0.03) 1px, transparent 1px);
       background-size: 88px 88px;
       mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent 90%);
     }
 
     body::after {
       background:
-        radial-gradient(circle at center, transparent 0 55%, rgba(4, 9, 18, 0.5) 100%);
+        radial-gradient(circle at center, transparent 0 55%, rgba(var(--bg-deep-rgb), 0.5) 100%);
+    }
+
+    :root[data-style="ledger"] body,
+    :root[data-style="cash"] body {
+      background: var(--bg);
+      background-attachment: scroll;
+    }
+
+    #app,
+    #landing {
+      position: relative;
+      z-index: 1;
+    }
+
+    #app[hidden],
+    #landing[hidden] {
+      display: none;
     }
 
     main {
-      position: relative;
-      z-index: 1;
       width: min(1320px, calc(100% - 32px));
-      margin: 28px auto 56px;
+      margin: 84px auto 56px;
+    }
+
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .landing-card {
+      width: min(440px, 100%);
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(var(--line-rgb), 0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-panel);
+      padding: 32px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .landing-card h1 {
+      margin: 4px 0 0;
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      letter-spacing: -0.04em;
+    }
+
+    .landing-card > p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .landing-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .landing-divider::before,
+    .landing-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .auth-tab-btn {
+      width: auto;
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    .auth-tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      color: var(--on-accent);
+      border-color: transparent;
+    }
+
+    .auth-tab-btn:not(.active) {
+      background: rgba(var(--ink-rgb), 0.03);
+      color: var(--muted);
+      border-color: var(--line);
+    }
+
+    .auth-form[hidden] {
+      display: none;
+    }
+
+    .auth-error {
+      color: var(--fall);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .auth-error[hidden] {
+      display: none;
     }
 
     .hero {
@@ -89,8 +351,9 @@
       border-radius: 50%;
       right: -80px;
       top: -120px;
-      background: radial-gradient(circle, rgba(97, 231, 194, 0.22), transparent 65%);
+      background: radial-gradient(circle, rgba(var(--accent-rgb), 0.22), transparent 65%);
       filter: blur(10px);
+      opacity: var(--decor-opacity);
     }
 
     .eyebrow {
@@ -98,29 +361,23 @@
       align-items: center;
       gap: 8px;
       padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-pill);
+      background: rgba(var(--ink-rgb), 0.05);
+      border: 1px solid rgba(var(--ink-rgb), 0.08);
       color: var(--muted);
-      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
-      gap: 36px;
-      margin-top: 18px;
-      align-items: start;
-    }
-
     .hero h1 {
       margin: 14px 0 12px;
-      font-size: clamp(2.8rem, 6vw, 5.6rem);
-      line-height: 0.92;
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1;
       letter-spacing: -0.05em;
-      max-width: 8ch;
+      max-width: 16ch;
     }
 
     .hero p {
@@ -131,91 +388,67 @@
       line-height: 1.6;
     }
 
-    .hero-panel {
-      padding: 0;
-      border-radius: 0;
-      background: transparent;
-      border: 0;
-      display: grid;
-      gap: 16px;
-      align-self: start;
-    }
-
-    .hero-panel p {
-      font-size: 0.94rem;
-    }
-
     .session-bar {
       display: grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .session-strip {
-      padding: 16px 18px;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+    .style-picker {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--panel-strong);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(var(--line-rgb), 0.14);
+      box-shadow: var(--shadow-panel);
     }
 
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-      margin: 18px 0 34px;
+    .style-picker label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      white-space: nowrap;
     }
 
-    .stat-card,
+    .style-picker select {
+      width: auto;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+    }
+
     .panel {
       background: var(--panel);
       backdrop-filter: blur(16px);
-      border: 1px solid rgba(153, 205, 255, 0.08);
+      border: 1px solid rgba(var(--line-rgb), 0.08);
       border-radius: var(--radius);
-      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.26);
-    }
-
-    .stat-card {
-      padding: 16px 16px 18px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stat-card::before {
-      content: "";
-      position: absolute;
-      inset: auto -20px -28px auto;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(103, 169, 255, 0.2), transparent 70%);
+      box-shadow: var(--shadow-panel);
     }
 
     .stat-label {
       display: block;
       color: var(--muted);
-      font-size: 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       margin-bottom: 8px;
     }
 
     .stat-value {
+      font-family: var(--font-mono);
       font-size: clamp(1.35rem, 2vw, 2rem);
       font-weight: 700;
-      letter-spacing: -0.04em;
-    }
-
-    .stat-meta {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.75fr);
-      gap: 32px;
-      align-items: start;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
     }
 
     .column {
@@ -224,10 +457,37 @@
       align-content: start;
     }
 
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin: 0 0 22px;
+    }
+
+    .tab-btn {
+      width: auto;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      background: rgba(var(--ink-rgb), 0.03);
+      color: var(--muted);
+      font-family: var(--font-display);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab-panel[hidden] {
+      display: none;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      color: var(--on-accent);
+      border-color: transparent;
+    }
+
     .panel {
       padding: 0;
       position: relative;
-      overflow: hidden;
       background: transparent;
       border: 0;
       box-shadow: none;
@@ -239,8 +499,7 @@
     }
 
     .panel-header,
-    .title-row,
-    .watchlist-top {
+    .title-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -255,7 +514,8 @@
     .panel h2,
     .panel h3 {
       margin: 0;
-      letter-spacing: -0.03em;
+      font-family: var(--font-display);
+      letter-spacing: -0.01em;
     }
 
     .lede,
@@ -275,15 +535,25 @@
       gap: 16px;
     }
 
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .main-panel[hidden] {
+      display: none;
+    }
+
     .price-tile {
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(153, 205, 255, 0.1);
-      border-radius: 22px;
+      border: 1px solid rgba(var(--line-rgb), 0.1);
+      border-radius: var(--radius);
       padding: 18px;
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
-        rgba(255, 255, 255, 0.02);
+        linear-gradient(180deg, rgba(var(--ink-rgb), 0.05), rgba(var(--ink-rgb), 0.02)),
+        rgba(var(--ink-rgb), 0.02);
       color: inherit;
       text-align: left;
       cursor: pointer;
@@ -294,7 +564,7 @@
     .price-tile.selected {
       transform: translateY(-3px);
       border-color: var(--line-strong);
-      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+      box-shadow: var(--shadow-panel);
     }
 
     .price-tile::before {
@@ -304,7 +574,8 @@
       width: 140px;
       height: 140px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(97, 231, 194, 0.18), transparent 70%);
+      background: radial-gradient(circle, rgba(var(--accent-rgb), 0.18), transparent 70%);
+      opacity: var(--decor-opacity);
     }
 
     .ticker {
@@ -315,15 +586,17 @@
     }
 
     .ticker strong {
+      font-family: var(--font-display);
       font-size: 1.15rem;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.02em;
     }
 
     .trend {
       padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      background: rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-pill);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: rgba(var(--ink-rgb), 0.06);
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -337,9 +610,11 @@
     }
 
     .price-value {
+      font-family: var(--font-mono);
       font-size: clamp(1.9rem, 4vw, 2.8rem);
       font-weight: 700;
-      letter-spacing: -0.05em;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
     }
 
     .micro {
@@ -361,31 +636,32 @@
       gap: 8px;
       width: fit-content;
       padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(var(--ink-rgb), 0.08);
+      background: rgba(var(--ink-rgb), 0.04);
       color: var(--muted);
-      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
 
     .pill.live {
       color: var(--accent);
-      border-color: rgba(97, 231, 194, 0.18);
-      background: rgba(97, 231, 194, 0.08);
+      border-color: rgba(var(--accent-rgb), 0.18);
+      background: rgba(var(--accent-rgb), 0.08);
     }
 
     .pill.offline {
       color: var(--warn);
-      border-color: rgba(255, 209, 102, 0.18);
-      background: rgba(255, 209, 102, 0.08);
+      border-color: rgba(var(--warn-rgb), 0.18);
+      background: rgba(var(--warn-rgb), 0.08);
     }
 
     .pill.alert {
       color: var(--fall);
-      border-color: rgba(255, 127, 143, 0.18);
-      background: rgba(255, 127, 143, 0.08);
+      border-color: rgba(var(--fall-rgb), 0.18);
+      background: rgba(var(--fall-rgb), 0.08);
     }
 
     form {
@@ -399,18 +675,11 @@
       gap: 10px;
     }
 
-    .action-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
     .subpanel {
-      border: 1px solid rgba(153, 205, 255, 0.08);
-      border-radius: 22px;
+      border: 1px solid rgba(var(--line-rgb), 0.08);
+      border-radius: var(--radius);
       padding: 16px;
-      background: rgba(255, 255, 255, 0.025);
+      background: rgba(var(--ink-rgb), 0.025);
     }
 
     .subpanel h3 {
@@ -422,29 +691,31 @@
     button {
       width: 100%;
       border: 1px solid var(--line);
-      border-radius: 16px;
+      border-radius: var(--radius-sm);
       padding: 12px 14px;
       font: inherit;
-      background: rgba(255, 255, 255, 0.04);
+      font-family: var(--font-body);
+      background: rgba(var(--ink-rgb), 0.04);
       color: var(--ink);
       transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
     }
 
     input::placeholder {
-      color: #7a91ad;
+      color: var(--muted);
     }
 
     input:focus,
     select:focus {
       outline: none;
-      border-color: rgba(103, 169, 255, 0.42);
-      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(var(--accent-2-rgb), 0.42);
+      background: rgba(var(--ink-rgb), 0.07);
     }
 
     button {
       cursor: pointer;
       background: linear-gradient(135deg, var(--accent-2), var(--accent));
-      color: #05111d;
+      color: var(--on-accent);
+      font-family: var(--font-display);
       font-weight: 700;
       border-color: transparent;
     }
@@ -454,15 +725,71 @@
     }
 
     button.secondary {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(var(--ink-rgb), 0.03);
       color: var(--ink);
       border-color: var(--line);
     }
 
     button.danger {
-      background: rgba(255, 127, 143, 0.1);
+      background: rgba(var(--fall-rgb), 0.1);
       color: var(--fall);
-      border-color: rgba(255, 127, 143, 0.2);
+      border-color: rgba(var(--fall-rgb), 0.2);
+    }
+
+    .trade-buttons {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    button.buy {
+      background: linear-gradient(135deg, var(--rise), var(--accent));
+      color: var(--on-accent);
+    }
+
+    button.sell {
+      background: rgba(var(--fall-rgb), 0.14);
+      color: var(--fall);
+      border-color: rgba(var(--fall-rgb), 0.32);
+    }
+
+    .form-actions-right {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-small {
+      width: auto;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+    }
+
+    .trade-panel {
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .trade-panel h3 {
+      font-size: 1.3rem;
+    }
+
+    .trade-panel input,
+    .trade-panel select {
+      padding: 18px 16px;
+      font-size: 1.1rem;
+    }
+
+    .trade-panel .trade-buttons button {
+      padding: 18px 16px;
+      font-size: 1.15rem;
+    }
+
+    .field-error {
+      color: var(--fall);
+      font-size: 0.88rem;
+      margin: 0;
+    }
+
+    .field-error[hidden] {
+      display: none;
     }
 
     table {
@@ -474,14 +801,35 @@
     th,
     td {
       padding: 14px 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      border-bottom: 1px solid rgba(var(--ink-rgb), 0.07);
       text-align: left;
       vertical-align: top;
     }
 
+    td {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    td strong {
+      font-family: var(--font-display);
+    }
+
+    tfoot td {
+      border-top: 1px solid var(--line-strong);
+      border-bottom: none;
+      background: rgba(var(--ink-rgb), 0.03);
+      font-weight: 700;
+    }
+
+    tfoot[hidden] {
+      display: none;
+    }
+
     th {
       color: var(--muted);
-      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       font-weight: 600;
@@ -493,9 +841,9 @@
 
     .table-wrap {
       overflow-x: auto;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(var(--ink-rgb), 0.05);
+      border-radius: var(--radius-sm);
+      background: rgba(var(--ink-rgb), 0.02);
     }
 
     .badge {
@@ -503,83 +851,18 @@
       align-items: center;
       gap: 8px;
       padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(var(--ink-rgb), 0.08);
+      background: rgba(var(--ink-rgb), 0.04);
       color: var(--muted);
-      font-size: 0.8rem;
-    }
-
-    .watchlists {
-      display: grid;
-      gap: 14px;
-      margin-top: 16px;
-    }
-
-    .watchlist {
-      padding: 16px;
-      border: 1px solid rgba(153, 205, 255, 0.08);
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.025);
-    }
-
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(97, 231, 194, 0.08);
-      border: 1px solid rgba(97, 231, 194, 0.14);
-      color: var(--ink);
-      font-size: 0.9rem;
-    }
-
-    .chip button {
-      width: auto;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      color: var(--fall);
-      font-weight: 700;
-    }
-
-    .feed {
-      position: relative;
-      overflow: hidden;
-      min-height: 440px;
-      padding: 22px;
-      border: 1px solid rgba(153, 205, 255, 0.08);
-      border-radius: 26px;
-      background:
-        radial-gradient(circle at top right, rgba(97, 231, 194, 0.1), transparent 34%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 28%),
-        rgba(3, 10, 19, 0.68);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
     }
 
     .section-rule {
       height: 1px;
       margin: 8px 0 0;
-      background: linear-gradient(90deg, rgba(103, 169, 255, 0.24), transparent 70%);
-    }
-
-    pre {
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      color: #d8e7f8;
-      font-family: "SFMono-Regular", ui-monospace, monospace;
-      white-space: pre-wrap;
-      line-height: 1.55;
-      max-height: 420px;
-      overflow: auto;
+      background: linear-gradient(90deg, rgba(var(--accent-2-rgb), 0.24), transparent 70%);
     }
 
     .empty {
@@ -593,16 +876,13 @@
     }
 
     @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(97, 231, 194, 0.34); }
-      100% { box-shadow: 0 0 0 18px rgba(97, 231, 194, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.34); }
+      100% { box-shadow: 0 0 0 18px rgba(var(--accent-rgb), 0); }
     }
 
     @media (max-width: 1120px) {
-      .hero-grid,
-      .layout,
-      .action-grid,
-      .stat-grid,
-      .price-grid {
+      .price-grid,
+      .stats-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -610,12 +890,7 @@
     @media (max-width: 720px) {
       main {
         width: min(100% - 18px, 1320px);
-        margin-top: 18px;
-      }
-
-      .stat-card,
-      .feed {
-        border-radius: 24px;
+        margin-top: 80px;
       }
 
       .session-bar {
@@ -629,154 +904,183 @@
   </style>
 </head>
 <body>
-  <main>
+  <div class="style-picker">
+    <label for="stylePicker">Design</label>
+    <select id="stylePicker">
+      <option value="aurora">Aurora Glass (Default)</option>
+      <option value="ticker">Ticker Tape</option>
+      <option value="ledger">Ledger &amp; Ink</option>
+      <option value="terminal">Quant Terminal</option>
+      <option value="cash">Cash &amp; Ease</option>
+    </select>
+  </div>
+
+  <div id="landing">
+    <div class="landing">
+      <div class="landing-card">
+        <span class="eyebrow">Real-Time Market Control</span>
+        <h1>Trade faster.</h1>
+        <p>Live quotes, fast trade execution, and smart price alerts — all in one dashboard. Everyone starts with $10,000 in simulated cash.</p>
+
+        <button type="button" id="guestButton">Continue as Guest</button>
+
+        <div class="landing-divider"><span>or</span></div>
+
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab-btn active" data-auth-tab="login">Log In</button>
+          <button type="button" class="auth-tab-btn" data-auth-tab="register">Create Account</button>
+        </div>
+
+        <form id="loginForm" class="auth-form">
+          <input id="loginEmail" type="email" placeholder="Email" autocomplete="username" required />
+          <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" required />
+          <button type="submit" class="secondary">Log In</button>
+        </form>
+
+        <form id="registerForm" class="auth-form" hidden>
+          <input id="registerEmail" type="email" placeholder="Email" autocomplete="username" required />
+          <input id="registerPassword" type="password" placeholder="Password (min 8 characters)" autocomplete="new-password" required minlength="8" />
+          <button type="submit" class="secondary">Create Account</button>
+        </form>
+
+        <p class="auth-error" id="authError" hidden></p>
+      </div>
+    </div>
+  </div>
+
+  <main id="app" hidden>
     <section class="hero">
       <span class="eyebrow">Real-Time Market Control</span>
-      <div class="hero-grid">
-        <div>
-          <h1>Trade faster. Watch everything.</h1>
-          <p>StockWatch is your session-based command deck for live quotes, rapid trade execution, watchlist curation, and 15%+ movement alerts backed by Express, PostgreSQL, Redis, Docker, and WebSockets.</p>
-        </div>
-        <aside class="hero-panel">
+      <h1>Trade faster.</h1>
+      <p>Live quotes, fast trade execution, and smart price alerts — all in one dashboard.</p>
+    </section>
+
+    <div class="title-row" style="margin: 26px 0 22px;">
+      <section class="tabs" role="tablist">
+        <button type="button" class="tab-btn main-tab-btn" data-main-tab="profile" id="mainTabProfile" role="tab" aria-selected="false">Profile</button>
+        <button type="button" class="tab-btn main-tab-btn active" data-main-tab="trade" id="mainTabTrade" role="tab" aria-selected="true">Trade</button>
+        <button type="button" class="tab-btn main-tab-btn" data-main-tab="settings" id="mainTabSettings" role="tab" aria-selected="false">Settings</button>
+      </section>
+      <button class="secondary btn-small" id="refreshAll" type="button">Refresh</button>
+    </div>
+
+    <div class="main-panel" id="mainPanelProfile" hidden>
+      <article class="panel">
+        <div class="panel-header">
           <div>
-            <span class="stat-label">Current Session</span>
-            <div class="stat-value" id="sessionBadge">Initializing</div>
+            <h2>Profile</h2>
+            <p class="lede" id="profileIdentityLine">Signed in.</p>
           </div>
-          <p>Select any price tile to prefill trading, CRUD, and alert forms. All actions stay isolated to the session id you save below.</p>
-          <div class="session-strip">
-            <div class="session-bar">
-              <input id="sessionId" placeholder="Session ID" />
-              <button id="saveSession">Save Session</button>
-              <button class="secondary" id="refreshAll">Refresh</button>
-            </div>
+        </div>
+        <div class="section-rule"></div>
+        <div style="height: 18px;"></div>
+        <div class="stats-grid">
+          <section class="subpanel">
+            <span class="stat-label">Cash Balance</span>
+            <div class="stat-value" id="cashBalanceBadge">$10,000.00</div>
+          </section>
+          <section class="subpanel">
+            <span class="stat-label">Position Value</span>
+            <div class="stat-value" id="profilePositionValue">$0.00</div>
+          </section>
+          <section class="subpanel">
+            <span class="stat-label">Total Value</span>
+            <div class="stat-value" id="profileTotalValue">$10,000.00</div>
+          </section>
+          <section class="subpanel">
+            <span class="stat-label">Unrealized PnL</span>
+            <div class="stat-value" id="profilePnl">$0.00</div>
+          </section>
+          <section class="subpanel">
+            <span class="stat-label">Open Positions</span>
+            <div class="stat-value" id="profilePositionCount">0</div>
+          </section>
+          <section class="subpanel">
+            <span class="stat-label">Active Alerts</span>
+            <div class="stat-value" id="profileAlertCount">0</div>
+          </section>
+        </div>
+      </article>
+    </div>
+
+    <div class="main-panel" id="mainPanelTrade">
+      <article class="panel" style="margin-bottom: 26px;">
+        <div class="panel-header">
+          <div>
+            <h2>Live Quotes</h2>
+            <p class="lede">Sub-second streaming quotes with visual direction changes and tap-to-focus interactions.</p>
           </div>
-        </aside>
-      </div>
-    </section>
+          <span class="pill live" id="socketStatus">Connecting...</span>
+        </div>
+        <div class="section-rule"></div>
+        <div style="height: 18px;"></div>
+        <div class="price-grid" id="priceGrid"></div>
+      </article>
 
-    <section class="stat-grid">
-      <article class="stat-card">
-        <span class="stat-label">Socket Status</span>
-        <div class="stat-value" id="socketMetric">Connecting</div>
-        <div class="stat-meta" id="socketStatusMeta">Waiting for live stream</div>
-      </article>
-      <article class="stat-card">
-        <span class="stat-label">Focused Symbol</span>
-        <div class="stat-value" id="focusMetric">AAPL</div>
-        <div class="stat-meta" id="focusMeta">Click any symbol to pin it</div>
-      </article>
-      <article class="stat-card">
-        <span class="stat-label">Open Positions</span>
-        <div class="stat-value" id="positionsMetric">0</div>
-        <div class="stat-meta" id="positionsMeta">No active exposure yet</div>
-      </article>
-      <article class="stat-card">
-        <span class="stat-label">Alert Rules</span>
-        <div class="stat-value" id="alertsMetric">0</div>
-        <div class="stat-meta" id="alertsMeta">15% movement alerts armed</div>
-      </article>
-    </section>
+      <section class="tabs" role="tablist" id="subTabs">
+        <button type="button" class="tab-btn active" data-tab="trading" id="tabBtnTrading" role="tab" aria-selected="true">Trading</button>
+        <button type="button" class="tab-btn" data-tab="alerts" id="tabBtnAlerts" role="tab" aria-selected="false">Alerts</button>
+        <button type="button" class="tab-btn" data-tab="leaderboard" id="tabBtnLeaderboard" role="tab" aria-selected="false">Leaderboard</button>
+      </section>
 
-    <section class="layout">
-      <div class="column">
+      <div class="column tab-panel" id="tabPanelTrading" role="tabpanel">
         <article class="panel">
           <div class="panel-header">
             <div>
-              <h2>Live Quotes</h2>
-              <p class="lede">Sub-second streaming quotes with visual direction changes and tap-to-focus interactions.</p>
-            </div>
-            <span class="pill live" id="socketStatus">Connecting...</span>
-          </div>
-          <div class="section-rule"></div>
-          <div style="height: 18px;"></div>
-          <div class="price-grid" id="priceGrid"></div>
-        </article>
-
-        <article class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>Execution Desk</h2>
-              <p class="lede">Use the live execution form for buy and sell flow, or directly manage persisted positions in PostgreSQL.</p>
+              <h2>Buy &amp; Sell Stocks</h2>
+              <p class="lede">Enter a symbol and quantity, then hit Buy or Sell to execute at the latest live price.</p>
             </div>
             <span class="badge" id="selectedSymbolBadge">Selected: AAPL</span>
           </div>
           <div class="section-rule"></div>
           <div style="height: 18px;"></div>
-          <div class="action-grid">
-            <section class="subpanel">
-              <h3>Trade Execution</h3>
-              <p class="muted">Trades use the latest cached market price from Redis.</p>
-              <form id="tradeForm">
-                <div class="form-row">
-                  <input id="tradeSymbol" placeholder="Symbol" required />
-                  <input id="tradeQuantity" type="number" min="1" step="1" placeholder="Quantity" required />
-                  <select id="tradeSide">
-                    <option value="buy">Buy</option>
-                    <option value="sell">Sell</option>
-                  </select>
-                </div>
-                <button type="submit">Execute Trade</button>
-              </form>
-            </section>
+          <section class="subpanel trade-panel">
+            <h3>Trade Execution</h3>
+            <p class="muted">Trades use the latest cached market price from Redis.</p>
+            <form id="tradeForm">
+              <div class="form-row">
+                <select id="tradeSymbol" required></select>
+                <input id="tradeQuantity" type="number" min="1" step="1" placeholder="Quantity" required />
+              </div>
+              <div class="form-row trade-buttons">
+                <button type="submit" id="buyButton" class="buy">Buy</button>
+                <button type="submit" id="sellButton" class="sell">Sell</button>
+              </div>
+            </form>
+            <p class="field-error" id="tradeError" hidden></p>
+          </section>
 
-            <section class="subpanel">
-              <h3>Position CRUD</h3>
-              <p class="muted">Create or overwrite a position record directly when you need manual control.</p>
-              <form id="positionCrudForm">
-                <div class="form-row">
-                  <input id="positionSymbol" placeholder="Symbol" required />
-                  <input id="positionQuantity" type="number" min="0.01" step="0.01" placeholder="Quantity" required />
-                </div>
-                <div class="form-row">
-                  <input id="positionAvgCost" type="number" min="0.01" step="0.01" placeholder="Average Cost" required />
-                  <button type="submit">Save Position</button>
-                </div>
-              </form>
-            </section>
-          </div>
-
-          <div class="title-row" style="margin: 18px 0 12px;">
-            <h3>Portfolio Positions</h3>
-            <button class="secondary" id="refreshPositions" type="button">Reload Positions</button>
-          </div>
+          <h3 style="margin: 18px 0 12px;">Portfolio Positions</h3>
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
                   <th>Symbol</th>
                   <th class="right">Qty</th>
-                  <th class="right">Avg Cost</th>
-                  <th class="right">Price</th>
+                  <th class="right">Aggregate Cost</th>
+                  <th class="right">Value</th>
                   <th class="right">PnL</th>
                   <th class="right">PnL %</th>
                   <th class="right">Actions</th>
                 </tr>
               </thead>
               <tbody id="positionsBody"></tbody>
+              <tfoot id="positionsTotalsRow" hidden>
+                <tr>
+                  <td colspan="2"><strong id="positionsTotalsLabel">Total across all positions</strong></td>
+                  <td class="right" id="positionsTotalCost">$0.00</td>
+                  <td class="right" id="positionsTotalValue">$0.00</td>
+                  <td class="right" id="positionsTotalPnl">$0.00</td>
+                  <td class="right" id="positionsTotalPnlPct">0.00%</td>
+                  <td class="right"></td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </article>
       </div>
 
-      <div class="column">
-        <article class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>Watchlists</h2>
-              <p class="lede">Group symbols into fast-moving lists and keep your personal market view organized.</p>
-            </div>
-          </div>
-          <div class="section-rule"></div>
-          <div style="height: 18px;"></div>
-          <form id="watchlistForm">
-            <div class="form-row">
-              <input id="watchlistName" placeholder="New watchlist name" required />
-              <button type="submit">Create Watchlist</button>
-            </div>
-          </form>
-          <div class="watchlists" id="watchlists"></div>
-        </article>
-
+      <div class="column tab-panel" id="tabPanelAlerts" role="tabpanel" hidden>
         <article class="panel">
           <div class="panel-header">
             <div>
@@ -788,7 +1092,7 @@
           <div style="height: 18px;"></div>
           <form id="alertForm">
             <div class="form-row">
-              <input id="alertSymbol" placeholder="Symbol" required />
+              <select id="alertSymbol" required></select>
               <input id="alertPercent" type="number" min="1" step="0.1" value="15" required />
               <select id="alertDirection">
                 <option value="either">Either Direction</option>
@@ -796,14 +1100,18 @@
                 <option value="down">Downward Move</option>
               </select>
             </div>
-            <button type="submit">Create Alert Rule</button>
+            <div class="form-actions-right">
+              <button type="submit" class="btn-small">Create Alert Rule</button>
+            </div>
           </form>
-          <div class="table-wrap" style="margin-top: 14px;">
+          <div class="table-wrap" style="margin-top: 32px;">
             <table>
               <thead>
                 <tr>
                   <th>Rule</th>
                   <th>Baseline</th>
+                  <th>Current Price</th>
+                  <th>Triggers At</th>
                   <th>State</th>
                   <th class="right">Actions</th>
                 </tr>
@@ -812,60 +1120,157 @@
             </table>
           </div>
         </article>
+      </div>
 
-        <article class="panel feed">
+      <div class="column tab-panel" id="tabPanelLeaderboard" role="tabpanel" hidden>
+        <article class="panel">
           <div class="panel-header">
             <div>
-              <h2>Activity Feed</h2>
-              <p class="lede">Live events, executions, and alert firings land here as they happen.</p>
+              <h2>Leaderboard</h2>
+              <p class="lede">Registered traders ranked by total profit. Guest sessions aren't ranked — create an account to appear here.</p>
             </div>
-            <button class="secondary" id="clearFeed" type="button">Clear Feed</button>
           </div>
-          <pre id="activity"></pre>
+          <div class="section-rule"></div>
+          <div style="height: 18px;"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Trader</th>
+                  <th class="right">Total Value</th>
+                  <th class="right">Profit</th>
+                  <th class="right">Profit %</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardBody"></tbody>
+            </table>
+          </div>
         </article>
       </div>
-    </section>
+    </div>
+
+    <div class="main-panel" id="mainPanelSettings" hidden>
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Settings</h2>
+            <p class="lede" id="settingsIdentityLine">Signed in.</p>
+          </div>
+        </div>
+        <div class="section-rule"></div>
+        <div style="height: 18px;"></div>
+
+        <div id="settingsAccountSection">
+          <section class="subpanel" style="margin-bottom: 16px;">
+            <h3>Change Email</h3>
+            <form id="changeEmailForm">
+              <div class="form-row">
+                <input id="newEmailInput" type="email" placeholder="New email" autocomplete="username" required />
+                <input id="emailChangePassword" type="password" placeholder="Current password" autocomplete="current-password" required />
+              </div>
+              <div class="form-actions-right">
+                <button type="submit" class="btn-small">Update Email</button>
+              </div>
+            </form>
+            <p class="field-error" id="emailChangeError" hidden></p>
+          </section>
+
+          <section class="subpanel" style="margin-bottom: 16px;">
+            <h3>Change Password</h3>
+            <form id="changePasswordForm">
+              <div class="form-row">
+                <input id="currentPasswordInput" type="password" placeholder="Current password" autocomplete="current-password" required />
+              </div>
+              <div class="form-row">
+                <input id="newPasswordInput" type="password" placeholder="New password (min 8 characters)" autocomplete="new-password" minlength="8" required />
+                <input id="confirmNewPasswordInput" type="password" placeholder="Confirm new password" autocomplete="new-password" minlength="8" required />
+              </div>
+              <div class="form-actions-right">
+                <button type="submit" class="btn-small">Update Password</button>
+              </div>
+            </form>
+            <p class="field-error" id="passwordChangeError" hidden></p>
+          </section>
+        </div>
+
+        <p class="muted" id="settingsGuestNote" hidden>Guest sessions don't have an email or password to manage — create an account to unlock these settings.</p>
+
+        <div class="session-bar" style="margin-top: 8px;">
+          <button class="secondary" id="logoutButton">Log Out</button>
+          <button class="danger" id="deleteAccountButton" hidden>Delete Account</button>
+        </div>
+      </article>
+    </div>
   </main>
 
   <script>
     const DEFAULT_SYMBOLS = ['AAPL', 'MSFT', 'GOOG'];
-    const activityEl = document.getElementById('activity');
+
+    function populateSymbolSelect(id) {
+      const select = document.getElementById(id);
+      DEFAULT_SYMBOLS.forEach((symbol) => {
+        const option = document.createElement('option');
+        option.value = symbol;
+        option.textContent = symbol;
+        select.appendChild(option);
+      });
+    }
+
+    populateSymbolSelect('tradeSymbol');
+    populateSymbolSelect('alertSymbol');
+
+    document.querySelectorAll('input[type="password"]').forEach((input) => {
+      input.addEventListener('mouseenter', () => { input.type = 'text'; });
+      input.addEventListener('mouseleave', () => { input.type = 'password'; });
+    });
+
+    const landingEl = document.getElementById('landing');
+    const appEl = document.getElementById('app');
     const priceGrid = document.getElementById('priceGrid');
     const positionsBody = document.getElementById('positionsBody');
-    const watchlistsEl = document.getElementById('watchlists');
     const alertsBody = document.getElementById('alertsBody');
+    const leaderboardBody = document.getElementById('leaderboardBody');
     const socketStatus = document.getElementById('socketStatus');
-    const sessionInput = document.getElementById('sessionId');
-    const sessionBadge = document.getElementById('sessionBadge');
-    const socketMetric = document.getElementById('socketMetric');
-    const socketStatusMeta = document.getElementById('socketStatusMeta');
-    const focusMetric = document.getElementById('focusMetric');
-    const focusMeta = document.getElementById('focusMeta');
-    const positionsMetric = document.getElementById('positionsMetric');
-    const positionsMeta = document.getElementById('positionsMeta');
-    const alertsMetric = document.getElementById('alertsMetric');
-    const alertsMeta = document.getElementById('alertsMeta');
     const selectedSymbolBadge = document.getElementById('selectedSymbolBadge');
+    const cashBalanceBadge = document.getElementById('cashBalanceBadge');
+    const profileIdentityLine = document.getElementById('profileIdentityLine');
+    const settingsIdentityLine = document.getElementById('settingsIdentityLine');
+    const tradeError = document.getElementById('tradeError');
+    const authError = document.getElementById('authError');
 
     const state = {
-      sessionId: localStorage.getItem('stockwatch_session') || localStorage.getItem('stocktrackr_session') || `demo-${Math.random().toString(36).slice(2, 10)}`,
+      sessionId: localStorage.getItem('stockwatch_session') || localStorage.getItem('stocktrackr_session') || null,
+      authToken: localStorage.getItem('stockwatch_token') || null,
+      email: localStorage.getItem('stockwatch_email') || null,
+      cashBalance: null,
       prices: {},
-      watchlists: [],
       alerts: [],
       positions: [],
       selectedSymbol: 'AAPL'
     };
 
-    sessionInput.value = state.sessionId;
-    sessionBadge.textContent = state.sessionId;
+    function persistIdentity({ sessionId, token, email }) {
+      state.sessionId = sessionId;
+      state.authToken = token || null;
+      state.email = email || null;
 
-    function log(message) {
-      const timestamp = new Date().toLocaleTimeString();
-      activityEl.textContent = `[${timestamp}] ${message}\n${activityEl.textContent}`.trim();
+      localStorage.setItem('stockwatch_session', sessionId);
+      if (token) localStorage.setItem('stockwatch_token', token); else localStorage.removeItem('stockwatch_token');
+      if (email) localStorage.setItem('stockwatch_email', email); else localStorage.removeItem('stockwatch_email');
+      localStorage.removeItem('stocktrackr_session');
+    }
+
+    function clearIdentity() {
+      localStorage.removeItem('stockwatch_session');
+      localStorage.removeItem('stocktrackr_session');
+      localStorage.removeItem('stockwatch_token');
+      localStorage.removeItem('stockwatch_email');
     }
 
     function headers(json = false) {
       const base = { 'X-Session-Id': state.sessionId };
+      if (state.authToken) base['Authorization'] = `Bearer ${state.authToken}`;
       return json ? { ...base, 'Content-Type': 'application/json' } : base;
     }
 
@@ -886,12 +1291,30 @@
 
     function fmtMoney(value) {
       if (value == null || Number.isNaN(Number(value))) return '—';
-      return `$${Number(value).toFixed(2)}`;
+      return `$${Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
     function fmtPct(value) {
       if (value == null || Number.isNaN(Number(value))) return '—';
       return `${Number(value).toFixed(2)}%`;
+    }
+
+    function triggerPrices(baseline, percent, direction) {
+      if (baseline == null || !Number.isFinite(baseline) || !Number.isFinite(percent)) return null;
+      const upper = baseline * (1 + percent / 100);
+      const lower = baseline * (1 - percent / 100);
+      if (direction === 'up') return { upper };
+      if (direction === 'down') return { lower };
+      return { upper, lower };
+    }
+
+    function triggerPricesText(baseline, percent, direction) {
+      const prices = triggerPrices(baseline, percent, direction);
+      if (!prices) return '—';
+      const parts = [];
+      if (prices.upper != null) parts.push(`≥ ${fmtMoney(prices.upper)}`);
+      if (prices.lower != null) parts.push(`≤ ${fmtMoney(prices.lower)}`);
+      return parts.join(' or ');
     }
 
     function flash(el) {
@@ -901,33 +1324,54 @@
     }
 
     function updateSummary() {
-      sessionBadge.textContent = state.sessionId;
-      focusMetric.textContent = state.selectedSymbol;
-      focusMeta.textContent = state.prices[state.selectedSymbol]?.price != null
-        ? `Last tick ${fmtMoney(state.prices[state.selectedSymbol].price)}`
-        : 'Waiting for focused symbol quote';
-      positionsMetric.textContent = String(state.positions.length);
-      positionsMeta.textContent = state.positions.length
-        ? `${state.positions.map((row) => row.symbol).join(', ')}`
-        : 'No active exposure yet';
-      alertsMetric.textContent = String(state.alerts.length);
-      alertsMeta.textContent = state.alerts.length
-        ? `${state.alerts.filter((row) => row.last_state === 'triggered').length} triggered`
-        : '15% movement alerts armed';
       selectedSymbolBadge.textContent = `Selected: ${state.selectedSymbol}`;
+    }
+
+    function updateIdentityLine() {
+      const text = state.email
+        ? `Signed in as ${state.email}.`
+        : `Guest session (${state.sessionId}) — create an account to keep your portfolio next time.`;
+      profileIdentityLine.textContent = text;
+      settingsIdentityLine.textContent = text;
+      document.getElementById('deleteAccountButton').hidden = !state.email;
+      document.getElementById('settingsAccountSection').hidden = !state.email;
+      document.getElementById('settingsGuestNote').hidden = !!state.email;
+    }
+
+    function renderCashBalance() {
+      cashBalanceBadge.textContent = fmtMoney(state.cashBalance);
+    }
+
+    function renderProfile() {
+      const positionValue = state.positions.reduce((sum, row) => {
+        const { price } = computeLivePosition(row);
+        return sum + (price != null ? price * row.quantity : 0);
+      }, 0);
+      const pnl = state.positions.reduce((sum, row) => {
+        const { pnl } = computeLivePosition(row);
+        return sum + (pnl ?? 0);
+      }, 0);
+      const cashBalance = state.cashBalance ?? 0;
+      const totalValue = cashBalance + positionValue;
+
+      document.getElementById('profilePositionValue').textContent = fmtMoney(positionValue);
+      const totalValueEl = document.getElementById('profileTotalValue');
+      totalValueEl.textContent = fmtMoney(totalValue);
+      const pnlEl = document.getElementById('profilePnl');
+      pnlEl.textContent = fmtMoney(pnl);
+      pnlEl.className = `stat-value ${pnl >= 0 ? 'up' : 'down'}`;
+      document.getElementById('profilePositionCount').textContent = String(state.positions.length);
+      document.getElementById('profileAlertCount').textContent = String(state.alerts.length);
     }
 
     function setSocketState(kind, label, meta) {
       socketStatus.textContent = label;
       socketStatus.className = `pill ${kind}`;
-      socketMetric.textContent = label;
-      socketStatusMeta.textContent = meta;
     }
 
     function selectSymbol(symbol) {
       state.selectedSymbol = symbol;
       document.getElementById('tradeSymbol').value = symbol;
-      document.getElementById('positionSymbol').value = symbol;
       document.getElementById('alertSymbol').value = symbol;
       updateSummary();
       renderPrices();
@@ -956,19 +1400,27 @@
       });
     }
 
-    function renderPositions(rows) {
+    function computeLivePosition(row) {
+      const price = state.prices[row.symbol]?.price ?? row.price;
+      const pnl = price != null ? (price - row.avg_cost) * row.quantity : null;
+      const pnlPct = price != null ? ((price - row.avg_cost) / row.avg_cost) * 100 : null;
+      return { price, pnl, pnlPct };
+    }
+
+    function renderPositions(rows = state.positions) {
       state.positions = rows;
       positionsBody.innerHTML = rows.length ? '' : `<tr><td colspan="7" class="empty">No positions yet.</td></tr>`;
 
       rows.forEach((row) => {
+        const { price, pnl, pnlPct } = computeLivePosition(row);
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${row.symbol}</strong></td>
           <td class="right">${Number(row.quantity).toFixed(2)}</td>
-          <td class="right">${fmtMoney(row.avg_cost)}</td>
-          <td class="right">${fmtMoney(row.price)}</td>
-          <td class="right ${row.pnl >= 0 ? 'up' : 'down'}">${fmtMoney(row.pnl)}</td>
-          <td class="right ${row.pnlPct >= 0 ? 'up' : 'down'}">${fmtPct(row.pnlPct)}</td>
+          <td class="right">${fmtMoney(row.avg_cost * row.quantity)}</td>
+          <td class="right">${fmtMoney(price != null ? price * row.quantity : null)}</td>
+          <td class="right ${pnl >= 0 ? 'up' : 'down'}">${fmtMoney(pnl)}</td>
+          <td class="right ${pnlPct >= 0 ? 'up' : 'down'}">${fmtPct(pnlPct)}</td>
           <td class="right"></td>
         `;
 
@@ -977,11 +1429,10 @@
         const editButton = document.createElement('button');
         editButton.type = 'button';
         editButton.className = 'secondary';
-        editButton.textContent = 'Edit';
+        editButton.textContent = 'Trade';
         editButton.addEventListener('click', () => {
           selectSymbol(row.symbol);
-          document.getElementById('positionQuantity').value = row.quantity;
-          document.getElementById('positionAvgCost').value = row.avg_cost;
+          document.getElementById('tradeQuantity').value = row.quantity;
         });
 
         const deleteButton = document.createElement('button');
@@ -990,7 +1441,6 @@
         deleteButton.textContent = 'Delete';
         deleteButton.addEventListener('click', async () => {
           await api(`/positions/${row.symbol}`, { method: 'DELETE' });
-          log(`Deleted ${row.symbol} position`);
           refreshPositions();
         });
 
@@ -998,109 +1448,54 @@
         positionsBody.appendChild(tr);
       });
 
+      renderPositionsTotals(rows);
       updateSummary();
     }
 
-    function renderWatchlists() {
-      watchlistsEl.innerHTML = '';
-      if (!state.watchlists.length) {
-        watchlistsEl.innerHTML = `<div class="empty">No watchlists yet.</div>`;
+    function renderPositionsTotals(rows) {
+      const totalsRow = document.getElementById('positionsTotalsRow');
+
+      // A total is only useful info once there's more than one holding to combine —
+      // with a single position it would just repeat the row above it.
+      if (rows.length < 2) {
+        totalsRow.hidden = true;
         return;
       }
+      totalsRow.hidden = false;
 
-      state.watchlists.forEach((watchlist) => {
-        const article = document.createElement('article');
-        article.className = 'watchlist';
-        article.innerHTML = `
-          <div class="watchlist-top">
-            <div>
-              <h3>${watchlist.name}</h3>
-              <div class="muted">${watchlist.symbols.length} tracked symbol${watchlist.symbols.length === 1 ? '' : 's'}</div>
-            </div>
-            <div class="title-row"></div>
-          </div>
-          <form class="add-symbol-form" style="margin-top: 14px;">
-            <div class="form-row">
-              <input placeholder="Add symbol to watchlist" required />
-              <button type="submit">Add Symbol</button>
-            </div>
-          </form>
-          <div class="chip-row"></div>
-        `;
+      let totalCost = 0;
+      let totalValue = 0;
+      let totalPnl = 0;
 
-        const actions = article.querySelector('.title-row');
-        const chips = article.querySelector('.chip-row');
-        const addSymbolForm = article.querySelector('.add-symbol-form');
-        const addSymbolInput = addSymbolForm.querySelector('input');
-
-        const renameButton = document.createElement('button');
-        renameButton.type = 'button';
-        renameButton.className = 'secondary';
-        renameButton.textContent = 'Rename';
-        renameButton.addEventListener('click', async () => {
-          const name = prompt('Rename watchlist', watchlist.name);
-          if (!name) return;
-          await api(`/watchlists/${watchlist.id}`, {
-            method: 'PUT',
-            body: JSON.stringify({ name })
-          });
-          log(`Renamed watchlist to ${name}`);
-          refreshWatchlists();
-        });
-
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.className = 'danger';
-        deleteButton.textContent = 'Delete';
-        deleteButton.addEventListener('click', async () => {
-          await api(`/watchlists/${watchlist.id}`, { method: 'DELETE' });
-          log(`Deleted watchlist ${watchlist.name}`);
-          refreshWatchlists();
-        });
-
-        actions.append(renameButton, deleteButton);
-
-        addSymbolForm.addEventListener('submit', async (event) => {
-          event.preventDefault();
-          const symbol = addSymbolInput.value.trim().toUpperCase();
-          if (!symbol) return;
-          await api(`/watchlists/${watchlist.id}/items`, {
-            method: 'POST',
-            body: JSON.stringify({ symbol })
-          });
-          addSymbolInput.value = '';
-          log(`Added ${symbol} to ${watchlist.name}`);
-          refreshWatchlists();
-        });
-
-        watchlist.symbols.forEach((symbol) => {
-          const chip = document.createElement('div');
-          chip.className = 'chip';
-          chip.innerHTML = `<span>${symbol}</span>`;
-          chip.addEventListener('click', () => selectSymbol(symbol));
-
-          const removeButton = document.createElement('button');
-          removeButton.type = 'button';
-          removeButton.textContent = 'x';
-          removeButton.addEventListener('click', async (event) => {
-            event.stopPropagation();
-            await api(`/watchlists/${watchlist.id}/items/${symbol}`, { method: 'DELETE' });
-            log(`Removed ${symbol} from ${watchlist.name}`);
-            refreshWatchlists();
-          });
-
-          chip.appendChild(removeButton);
-          chips.appendChild(chip);
-        });
-
-        watchlistsEl.appendChild(article);
+      rows.forEach((row) => {
+        const { price, pnl } = computeLivePosition(row);
+        totalCost += row.avg_cost * row.quantity;
+        totalValue += (price ?? row.avg_cost) * row.quantity;
+        totalPnl += pnl ?? 0;
       });
+
+      const totalPnlPct = totalCost > 0 ? (totalPnl / totalCost) * 100 : null;
+
+      document.getElementById('positionsTotalsLabel').textContent = `Total across ${rows.length} positions`;
+      document.getElementById('positionsTotalCost').textContent = fmtMoney(totalCost);
+      document.getElementById('positionsTotalValue').textContent = fmtMoney(totalValue);
+      const pnlEl = document.getElementById('positionsTotalPnl');
+      pnlEl.textContent = fmtMoney(totalPnl);
+      pnlEl.className = `right ${totalPnl >= 0 ? 'up' : 'down'}`;
+      const pnlPctEl = document.getElementById('positionsTotalPnlPct');
+      pnlPctEl.textContent = fmtPct(totalPnlPct);
+      pnlPctEl.className = `right ${totalPnlPct >= 0 ? 'up' : 'down'}`;
     }
 
     function renderAlerts() {
-      alertsBody.innerHTML = state.alerts.length ? '' : `<tr><td colspan="4" class="empty">No alerts yet.</td></tr>`;
+      alertsBody.innerHTML = state.alerts.length ? '' : `<tr><td colspan="6" class="empty">No alerts yet.</td></tr>`;
 
       state.alerts.forEach((alert) => {
+        const currentPrice = state.prices[alert.symbol]?.price;
+        const priceClass = currentPrice != null && alert.baseline_price != null
+          ? (currentPrice >= alert.baseline_price ? 'up' : 'down')
+          : '';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>
@@ -1108,6 +1503,8 @@
             <div class="micro">${alert.percent_threshold}% ${alert.movement_direction}</div>
           </td>
           <td>${fmtMoney(alert.baseline_price)}</td>
+          <td class="${priceClass}">${fmtMoney(currentPrice)}</td>
+          <td>${triggerPricesText(alert.baseline_price, alert.percent_threshold, alert.movement_direction)}</td>
           <td><span class="badge ${alert.last_state === 'triggered' ? 'pill alert' : ''}">${alert.last_state || 'armed'}</span></td>
           <td class="right"></td>
         `;
@@ -1131,7 +1528,6 @@
               baseline_price: alert.baseline_price
             })
           });
-          log(`Updated ${alert.symbol} alert to ${percent}%`);
           refreshAlerts();
         });
 
@@ -1141,7 +1537,6 @@
         deleteButton.textContent = 'Delete';
         deleteButton.addEventListener('click', async () => {
           await api(`/alerts/${alert.id}`, { method: 'DELETE' });
-          log(`Deleted alert ${alert.id}`);
           refreshAlerts();
         });
 
@@ -1152,14 +1547,31 @@
       updateSummary();
     }
 
+    function renderLeaderboard(rows) {
+      leaderboardBody.innerHTML = rows.length ? '' : `<tr><td colspan="5" class="empty">No registered traders yet.</td></tr>`;
+
+      rows.forEach((row, index) => {
+        const isYou = state.email && row.displayName === state.email.split('@')[0];
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td><strong>${row.displayName}</strong>${isYou ? ' <span class="badge">You</span>' : ''}</td>
+          <td class="right">${fmtMoney(row.totalValue)}</td>
+          <td class="right ${row.profit >= 0 ? 'up' : 'down'}">${fmtMoney(row.profit)}</td>
+          <td class="right ${row.profitPct >= 0 ? 'up' : 'down'}">${fmtPct(row.profitPct)}</td>
+        `;
+        leaderboardBody.appendChild(tr);
+      });
+    }
+
+    async function refreshLeaderboard() {
+      const rows = await api('/leaderboard');
+      renderLeaderboard(rows);
+    }
+
     async function refreshPositions() {
       const rows = await api('/positions');
       renderPositions(rows);
-    }
-
-    async function refreshWatchlists() {
-      state.watchlists = await api('/watchlists');
-      renderWatchlists();
     }
 
     async function refreshAlerts() {
@@ -1167,9 +1579,15 @@
       renderAlerts();
     }
 
+    async function refreshAccount() {
+      const data = await api('/account');
+      state.cashBalance = data.cashBalance;
+      renderCashBalance();
+    }
+
     async function refreshAll() {
-      await Promise.all([refreshPositions(), refreshWatchlists(), refreshAlerts()]);
-      log(`Dashboard refreshed for session ${state.sessionId}`);
+      await Promise.all([refreshPositions(), refreshAlerts(), refreshAccount(), refreshLeaderboard()]);
+      renderProfile();
       flash(document.querySelector('.hero'));
     }
 
@@ -1207,81 +1625,162 @@
           }
 
           renderPrices();
+          if (state.alerts.some((alert) => alert.symbol === symbol)) {
+            renderAlerts();
+          }
+          if (state.positions.some((p) => p.symbol === symbol)) {
+            renderPositions();
+            renderProfile();
+          }
           return;
         }
 
         if (message.type === 'alert') {
-          if (message.payload.alert_type === 'percent_move') {
-            log(`Alert fired for ${message.payload.symbol}: ${Number(message.payload.percent_change).toFixed(2)}% vs baseline ${Number(message.payload.baseline_price).toFixed(2)}`);
-          } else {
-            log(`Threshold alert fired for ${message.payload.symbol} at ${message.payload.price}`);
-          }
-          flash(document.querySelector('.feed'));
+          flash(document.getElementById('tabPanelAlerts'));
           refreshAlerts();
+        }
+
+        if (message.type === 'leaderboard') {
+          refreshLeaderboard();
         }
       });
     }
 
-    document.getElementById('saveSession').addEventListener('click', () => {
-      state.sessionId = sessionInput.value.trim() || state.sessionId;
-      sessionInput.value = state.sessionId;
-      localStorage.setItem('stockwatch_session', state.sessionId);
-      log(`Session saved as ${state.sessionId}`);
+    document.getElementById('refreshAll').addEventListener('click', refreshAll);
+
+    const stylePicker = document.getElementById('stylePicker');
+    stylePicker.value = localStorage.getItem('stockwatch_ui_style') || 'aurora';
+    stylePicker.addEventListener('change', () => {
+      document.documentElement.setAttribute('data-style', stylePicker.value);
+      localStorage.setItem('stockwatch_ui_style', stylePicker.value);
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', () => {
+      clearIdentity();
       location.reload();
     });
 
-    document.getElementById('refreshAll').addEventListener('click', refreshAll);
-    document.getElementById('refreshPositions').addEventListener('click', refreshPositions);
-    document.getElementById('clearFeed').addEventListener('click', () => {
-      activityEl.textContent = '';
+    document.getElementById('deleteAccountButton').addEventListener('click', async () => {
+      if (!confirm('Delete your account permanently? This cannot be undone — your positions, alerts, and balance will all be lost.')) return;
+      const password = prompt('Enter your password to confirm account deletion:');
+      if (!password) return;
+
+      try {
+        await api('/auth/account', { method: 'DELETE', body: JSON.stringify({ password }) });
+        clearIdentity();
+        location.reload();
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    const emailChangeError = document.getElementById('emailChangeError');
+    const passwordChangeError = document.getElementById('passwordChangeError');
+
+    document.getElementById('changeEmailForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      emailChangeError.hidden = true;
+      const email = document.getElementById('newEmailInput').value.trim();
+      const password = document.getElementById('emailChangePassword').value;
+
+      try {
+        const data = await api('/auth/email', { method: 'PATCH', body: JSON.stringify({ email, password }) });
+        persistIdentity({ sessionId: data.sessionId, token: data.token, email: data.email });
+        updateIdentityLine();
+        refreshLeaderboard();
+        event.target.reset();
+      } catch (error) {
+        emailChangeError.textContent = error.message;
+        emailChangeError.hidden = false;
+      }
+    });
+
+    document.getElementById('changePasswordForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      passwordChangeError.hidden = true;
+      const currentPassword = document.getElementById('currentPasswordInput').value;
+      const newPassword = document.getElementById('newPasswordInput').value;
+      const confirmNewPassword = document.getElementById('confirmNewPasswordInput').value;
+
+      if (newPassword !== confirmNewPassword) {
+        passwordChangeError.textContent = 'New password and confirmation do not match.';
+        passwordChangeError.hidden = false;
+        return;
+      }
+
+      try {
+        const data = await api('/auth/password', { method: 'PATCH', body: JSON.stringify({ currentPassword, newPassword }) });
+        persistIdentity({ sessionId: data.sessionId, token: data.token, email: data.email });
+        event.target.reset();
+      } catch (error) {
+        passwordChangeError.textContent = error.message;
+        passwordChangeError.hidden = false;
+      }
+    });
+
+    const tabButtons = document.querySelectorAll('#subTabs .tab-btn');
+    const tabPanels = {
+      trading: document.getElementById('tabPanelTrading'),
+      alerts: document.getElementById('tabPanelAlerts'),
+      leaderboard: document.getElementById('tabPanelLeaderboard')
+    };
+
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        tabButtons.forEach((other) => {
+          other.classList.toggle('active', other === button);
+          other.setAttribute('aria-selected', String(other === button));
+        });
+        Object.entries(tabPanels).forEach(([key, panel]) => {
+          panel.hidden = key !== button.dataset.tab;
+        });
+      });
+    });
+
+    const mainTabButtons = document.querySelectorAll('.main-tab-btn');
+    const mainPanels = {
+      profile: document.getElementById('mainPanelProfile'),
+      trade: document.getElementById('mainPanelTrade'),
+      settings: document.getElementById('mainPanelSettings')
+    };
+
+    mainTabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        mainTabButtons.forEach((other) => {
+          other.classList.toggle('active', other === button);
+          other.setAttribute('aria-selected', String(other === button));
+        });
+        Object.entries(mainPanels).forEach(([key, panel]) => {
+          panel.hidden = key !== button.dataset.mainTab;
+        });
+        if (button.dataset.mainTab === 'profile') {
+          renderProfile();
+        }
+      });
     });
 
     document.getElementById('tradeForm').addEventListener('submit', async (event) => {
       event.preventDefault();
+      tradeError.hidden = true;
       const symbol = document.getElementById('tradeSymbol').value.trim().toUpperCase();
       const quantity = Number(document.getElementById('tradeQuantity').value);
-      const side = document.getElementById('tradeSide').value;
+      const side = event.submitter?.id === 'sellButton' ? 'sell' : 'buy';
 
-      const result = await api('/positions/execute', {
-        method: 'POST',
-        body: JSON.stringify({ symbol, quantity, side })
-      });
-      log(`${side.toUpperCase()} ${result.executed_quantity} ${result.symbol} @ ${Number(result.execution_price).toFixed(2)}`);
-      flash(document.querySelector('.panel'));
-      refreshPositions();
-    });
-
-    document.getElementById('positionCrudForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const symbol = document.getElementById('positionSymbol').value.trim().toUpperCase();
-      const quantity = Number(document.getElementById('positionQuantity').value);
-      const avgCost = Number(document.getElementById('positionAvgCost').value);
-
-      await api(`/positions/${symbol}`, {
-        method: 'PUT',
-        body: JSON.stringify({ quantity, avg_cost: avgCost })
-      }).catch(async () => {
-        await api('/positions', {
+      try {
+        const result = await api('/positions/execute', {
           method: 'POST',
-          body: JSON.stringify({ symbol, quantity, avg_cost: avgCost })
+          body: JSON.stringify({ symbol, quantity, side })
         });
-      });
-
-      log(`Saved position ${symbol}`);
-      refreshPositions();
-    });
-
-    document.getElementById('watchlistForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const name = document.getElementById('watchlistName').value.trim();
-      if (!name) return;
-      await api('/watchlists', {
-        method: 'POST',
-        body: JSON.stringify({ name })
-      });
-      document.getElementById('watchlistName').value = '';
-      log(`Created watchlist ${name}`);
-      refreshWatchlists();
+        if (result.cash_balance != null) {
+          state.cashBalance = result.cash_balance;
+          renderCashBalance();
+        }
+        flash(document.querySelector('.panel'));
+        refreshPositions();
+      } catch (error) {
+        tradeError.textContent = error.message;
+        tradeError.hidden = false;
+      }
     });
 
     document.getElementById('alertForm').addEventListener('submit', async (event) => {
@@ -1299,15 +1798,131 @@
           movement_direction: direction
         })
       });
-      log(`Created ${percent}% ${direction} alert for ${symbol}`);
       refreshAlerts();
     });
 
-    selectSymbol(state.selectedSymbol);
-    renderPrices();
-    updateSummary();
-    refreshAll().catch((error) => log(error.message));
-    connectSocket();
+    async function seedStarterPosition(isGuest) {
+      try {
+        if (isGuest) {
+          // Guests aren't ranked on the leaderboard, so it's safe to give them an
+          // instant unrealized gain for demo flavor: a below-market cost basis that
+          // never touches their cash balance.
+          await api('/positions', {
+            method: 'POST',
+            body: JSON.stringify({ symbol: 'AAPL', quantity: 10, avg_cost: 170 })
+          });
+          return;
+        }
+
+        // Registered accounts are ranked by profit, so their starter position has to be
+        // a real purchase at the live price — no free unrealized gain.
+        await api('/positions/execute', {
+          method: 'POST',
+          body: JSON.stringify({ symbol: 'AAPL', quantity: 10, side: 'buy' })
+        });
+      } catch (error) {
+        console.error('Could not seed starter position:', error);
+      }
+    }
+
+    function showApp() {
+      landingEl.hidden = true;
+      appEl.hidden = false;
+    }
+
+    function showLanding() {
+      landingEl.hidden = false;
+      appEl.hidden = true;
+    }
+
+    async function boot(isFirstBoot, isGuest) {
+      showApp();
+      selectSymbol(state.selectedSymbol);
+      renderPrices();
+      updateSummary();
+      updateIdentityLine();
+      try {
+        if (isFirstBoot) await seedStarterPosition(isGuest);
+        await refreshAll();
+      } catch (error) {
+        console.error(error);
+      }
+      connectSocket();
+    }
+
+    function showAuthError(message) {
+      authError.textContent = message;
+      authError.hidden = false;
+    }
+
+    function clearAuthError() {
+      authError.hidden = true;
+    }
+
+    document.getElementById('guestButton').addEventListener('click', () => {
+      const sessionId = `demo-${Math.random().toString(36).slice(2, 10)}`;
+      persistIdentity({ sessionId, token: null, email: null });
+      boot(true, true);
+    });
+
+    document.querySelectorAll('.auth-tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.auth-tab-btn').forEach((other) => other.classList.toggle('active', other === btn));
+        document.getElementById('loginForm').hidden = btn.dataset.authTab !== 'login';
+        document.getElementById('registerForm').hidden = btn.dataset.authTab !== 'register';
+        clearAuthError();
+      });
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearAuthError();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const response = await fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data?.error || 'Log in failed');
+
+        persistIdentity({ sessionId: data.sessionId, token: data.token, email: data.email });
+        boot(false, false);
+      } catch (error) {
+        showAuthError(error.message);
+      }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearAuthError();
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value;
+
+      try {
+        const response = await fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data?.error || 'Account creation failed');
+
+        persistIdentity({ sessionId: data.sessionId, token: data.token, email: data.email });
+        boot(true, false);
+      } catch (error) {
+        showAuthError(error.message);
+      }
+    });
+
+    if (state.sessionId) {
+      boot(false, false);
+    } else {
+      showLanding();
+    }
   </script>
 </body>
 </html>
