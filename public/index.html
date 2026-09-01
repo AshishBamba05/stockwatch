@@ -488,6 +488,59 @@
       box-shadow: var(--shadow-panel);
     }
 
+    .welcome-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .welcome-modal[hidden] {
+      display: none;
+    }
+
+    .welcome-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(var(--bg-deep-rgb), 0.72);
+      backdrop-filter: blur(6px);
+    }
+
+    .welcome-modal-card {
+      position: relative;
+      z-index: 1;
+      max-width: 420px;
+      width: calc(100% - 40px);
+      padding: 32px;
+      text-align: center;
+      display: grid;
+      gap: 16px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(var(--accent-rgb), 0.3);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-panel);
+    }
+
+    .welcome-modal-card h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      letter-spacing: -0.01em;
+    }
+
+    .welcome-modal-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .welcome-modal-card button {
+      width: auto;
+      justify-self: center;
+      padding: 12px 28px;
+    }
+
     .stat-label {
       display: block;
       color: var(--muted);
@@ -1006,6 +1059,15 @@
   </div>
 
   <main id="app" hidden>
+    <div class="welcome-modal" id="welcomeModal" hidden>
+      <div class="welcome-modal-backdrop"></div>
+      <div class="welcome-modal-card">
+        <h2>Welcome to StockWatch</h2>
+        <p>We've automatically added <strong>10 shares of AAPL</strong> to your portfolio to help you get started. Head to your Profile to see your holdings.</p>
+        <button type="button" id="welcomeModalClose">View my profile</button>
+      </div>
+    </div>
+
     <section class="hero">
       <span class="eyebrow">Real-Time Market Control</span>
       <h1>StockWatch</h1>
@@ -1922,6 +1984,17 @@
       appEl.hidden = false;
     }
 
+    function showWelcomeModal() {
+      document.getElementById('welcomeModal').hidden = false;
+    }
+
+    function hideWelcomeModal() {
+      document.getElementById('welcomeModal').hidden = true;
+    }
+
+    document.getElementById('welcomeModalClose').addEventListener('click', hideWelcomeModal);
+    document.querySelector('.welcome-modal-backdrop').addEventListener('click', hideWelcomeModal);
+
     function showLanding() {
       landingEl.hidden = false;
       appEl.hidden = true;
@@ -1935,7 +2008,10 @@
       updateIdentityLine();
       renderProfile();
       try {
-        if (isFirstBoot) await seedStarterPosition(isGuest);
+        if (isFirstBoot) {
+          await seedStarterPosition(isGuest);
+          showWelcomeModal();
+        }
         await refreshAll();
       } catch (error) {
         console.error(error);
