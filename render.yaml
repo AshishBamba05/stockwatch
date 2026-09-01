@@ -11,7 +11,7 @@ services:
     ipAllowList: []
 
   - type: web
-    name: stocktrackr
+    name: abamba-stockwatch
     env: docker
     plan: free
     dockerfilePath: ./Dockerfile
