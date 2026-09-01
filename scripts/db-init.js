@@ -18,7 +18,11 @@ function getEnvOrDefault(value, fallback) {
     process.env.DATABASE_URL,
     'postgres://stock:stock@localhost:5432/stocktrackr'
   );
-  const client = new Client({ connectionString });
+  const isLocal = /localhost|127\.0\.0\.1/.test(connectionString);
+  const client = new Client({
+    connectionString,
+    ssl: isLocal ? undefined : { rejectUnauthorized: false }
+  });
   await client.connect();
   await client.query(sql);
   await client.end();
