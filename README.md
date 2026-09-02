@@ -194,8 +194,8 @@ I integrated Docker to ease the burden of installing dependencies. Instead of ha
 
 1.) Clone the repository:
    ```bash
-   git clone https://github.com/AshishBamba05/stocktrackr.git
-   cd stocktrackr
+   git clone https://github.com/AshishBamba05/stockwatch.git
+   cd stockwatch
    ```
 
 2.) Install `Node` dependencies:
