@@ -89,28 +89,6 @@ Users can register an account (or trade as an anonymous guest session), view liv
 
 ---
 
-## 📸 Screenshots / Demo
-
-## Session Storage
-<img width="495" height="288" alt="Screenshot 2026-04-07 at 11 31 16 PM" src="https://github.com/user-attachments/assets/08956104-3303-4d43-84ba-cdd92ce30b6d" />
-
-
-## Price Live Stream
-<img width="898" height="287" alt="Screenshot 2026-04-07 at 11 31 30 PM" src="https://github.com/user-attachments/assets/10e356bd-015c-4b45-aaa5-bac0cc912338" />
-
-## Trade Execution
-<img width="464" height="245" alt="Screenshot 2026-04-07 at 11 32 06 PM" src="https://github.com/user-attachments/assets/2d3d0fb7-59fa-4400-bca6-abf2c3464245" />
-
-## Alerts
-<img width="478" height="348" alt="Screenshot 2026-04-07 at 11 32 37 PM" src="https://github.com/user-attachments/assets/9ba0e347-d711-4787-8900-c2494afa1abc" />
-
-## Activity Feed
-<img width="487" height="439" alt="Screenshot 2026-04-07 at 11 32 50 PM" src="https://github.com/user-attachments/assets/61b9cd29-7025-4cee-9a8b-0c911c375b9f" />
-
-> Note: watchlists have since been removed from the app in favor of accounts, a leaderboard, and richer alerts — screenshots above may not reflect the latest UI (Profile/Trade tabs, leaderboard, welcome modal).
-
----
-
 
 ## 👨‍💻 Software Engineering Design Decisions
 
