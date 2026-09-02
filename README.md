@@ -127,33 +127,33 @@ For REST APIs, the CRUD mapping is:
 Here's how this corresponds in my project:
 
 `/symbols`: 1
-   -  `GET /symbols`
+   -  `GET /symbols` — search/list tradable symbols (`?q=` matches by ticker prefix or name)
 
 `/positions`: 5
-   -  `GET /positions`
-   -  `POST /positions`
-   -  `PUT /positions/:symbol`
-   -  `DELETE /positions/:symbol`
-   -  `POST /positions/execute`
+   -  `GET /positions` — list the session's open positions with live price and unrealized P/L attached
+   -  `POST /positions` — upsert a position at a given quantity/avg cost
+   -  `PUT /positions/:symbol` — overwrite quantity/avg cost for an existing position
+   -  `DELETE /positions/:symbol` — remove a position outright
+   -  `POST /positions/execute` — execute a buy/sell at the live price, updating cash balance, avg cost, and realized P/L
 
 `/alerts`: 4
-   -  `GET /alerts`
-   -  `POST /alerts`
-   -  `PUT /alerts/:id`
-   -  `DELETE /alerts/:id`
+   -  `GET /alerts` — list the session's configured alerts (price-threshold and percent-move)
+   -  `POST /alerts` — create a price-threshold or percent-move alert for a symbol
+   -  `PUT /alerts/:id` — update an existing alert's type/target/thresholds
+   -  `DELETE /alerts/:id` — remove an alert
 
 `/auth`: 5
-   -  `POST /auth/register`
-   -  `POST /auth/login`
-   -  `PATCH /auth/email`
-   -  `PATCH /auth/password`
-   -  `DELETE /auth/account`
+   -  `POST /auth/register` — create an account (hashes the password, seeds a $10k balance, returns a JWT)
+   -  `POST /auth/login` — verify credentials and return a fresh JWT
+   -  `PATCH /auth/email` — change the logged-in user's email (requires a verified token)
+   -  `PATCH /auth/password` — change the logged-in user's password after verifying the current one
+   -  `DELETE /auth/account` — permanently delete the account and its positions/alerts/balance
 
 `/account`: 1
-   -  `GET /account`
+   -  `GET /account` — fetch the current session's cash balance
 
 `/leaderboard`: 1
-   -  `GET /leaderboard`
+   -  `GET /leaderboard` — rank all registered users by total portfolio value and profit vs. the $10k starting balance
 
 
 ### 2. Leveraging Redis Caching + WebSockets connection to stream live price feed
