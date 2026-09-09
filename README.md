@@ -2,6 +2,8 @@
 
 **Real-time portfolio tracking platform**
 
+Live App: https://abamba-stockwatch.onrender.com/
+
 This project is licensed under the [MIT License](./LICENSE) © 2025 Ashish Bamba.
 
 ---
